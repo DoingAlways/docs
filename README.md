@@ -2,4 +2,3 @@
 
 ## API Platform documentation
 
-
