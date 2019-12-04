@@ -1,6 +1,6 @@
 # JWT Authentication
 
-> [JSON Web Token (JWT)](https://jwt.io/) is a JSON-based open standard ([RFC 7519](https://tools.ietf.org/html/rfc7519)) for creating access tokens that assert some number of claims. For example, a server could generate a token that has the claim "logged in as admin" and provide that to a client. The client could then use that token to prove that he/she is logged in as admin. The tokens are signed by the server's key, so the server is able to verify that the token is legitimate. The tokens are designed to be compact, URL-safe and usable especially in web browser single sign-on (SSO) context.
+> [JSON Web Token \(JWT\)](https://jwt.io/) is a JSON-based open standard \([RFC 7519](https://tools.ietf.org/html/rfc7519)\) for creating access tokens that assert some number of claims. For example, a server could generate a token that has the claim "logged in as admin" and provide that to a client. The client could then use that token to prove that he/she is logged in as admin. The tokens are signed by the server's key, so the server is able to verify that the token is legitimate. The tokens are designed to be compact, URL-safe and usable especially in web browser single sign-on \(SSO\) context.
 >
 > ―[Wikipedia](https://en.wikipedia.org/wiki/JSON_Web_Token)
 
@@ -10,40 +10,38 @@ API Platform allows to easily add a JWT-based authentication to your API using [
 
 We begin by installing the bundle:
 
-    $ docker-compose exec php composer require jwt-auth
+```text
+$ docker-compose exec php composer require jwt-auth
+```
 
 Then we need to generate the public and private keys used for signing JWT tokens. If you're using the [API Platform distribution](../distribution/index.md), you may run this from the project's root directory:
 
-    $ docker-compose exec php sh -c '
-        set -e
-        apk add openssl
-        mkdir -p config/jwt
-        jwt_passhrase=$(grep ''^JWT_PASSPHRASE='' .env | cut -f 2 -d ''='')
-        echo "$jwt_passhrase" | openssl genpkey -out config/jwt/private.pem -pass stdin -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
-        echo "$jwt_passhrase" | openssl pkey -in config/jwt/private.pem -passin stdin -out config/jwt/public.pem -pubout
-        setfacl -R -m u:www-data:rX -m u:"$(whoami)":rwX config/jwt
-        setfacl -dR -m u:www-data:rX -m u:"$(whoami)":rwX config/jwt
-    '
+```text
+$ docker-compose exec php sh -c '
+    set -e
+    apk add openssl
+    mkdir -p config/jwt
+    jwt_passhrase=$(grep ''^JWT_PASSPHRASE='' .env | cut -f 2 -d ''='')
+    echo "$jwt_passhrase" | openssl genpkey -out config/jwt/private.pem -pass stdin -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
+    echo "$jwt_passhrase" | openssl pkey -in config/jwt/private.pem -passin stdin -out config/jwt/public.pem -pubout
+    setfacl -R -m u:www-data:rX -m u:"$(whoami)":rwX config/jwt
+    setfacl -dR -m u:www-data:rX -m u:"$(whoami)":rwX config/jwt
+'
+```
 
-This takes care of using the correct passphrase to encrypt the private key, and setting the correct permissions on the
-keys allowing the web server to read them.
+This takes care of using the correct passphrase to encrypt the private key, and setting the correct permissions on the keys allowing the web server to read them.
 
 If you want the keys to be auto generated in `dev` environment, see an example in the [docker-entrypoint script of api-platform/demo](https://github.com/api-platform/demo/blob/master/api/docker/php/docker-entrypoint.sh).
 
-The keys should not be checked in to the repository (i.e. it's in `api/.gitignore`). However, note that a JWT token could
-only pass signature validation against the same pair of keys it was signed with. This is especially relevant in a production
-environment, where you don't want to accidentally invalidate all your clients' tokens at every deployment.
+The keys should not be checked in to the repository \(i.e. it's in `api/.gitignore`\). However, note that a JWT token could only pass signature validation against the same pair of keys it was signed with. This is especially relevant in a production environment, where you don't want to accidentally invalidate all your clients' tokens at every deployment.
 
-For more information, refer to [the bundle's documentation](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.md)
-or read a [general introduction to JWT here](https://jwt.io/introduction/).
+For more information, refer to [the bundle's documentation](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.md) or read a [general introduction to JWT here](https://jwt.io/introduction/).
 
 We're not done yet! Let's move on to configuring the Symfony SecurityBundle for JWT authentication.
 
 ## Configuring the Symfony SecurityBundle
 
-It is necessary to configure a user provider. You can either use the [Doctrine entity user provider](https://symfony.com/doc/current/security/user_provider.html#entity-user-provider)
-provided by Symfony (recommended), [create a custom user provider](https://symfony.com/doc/current/security/user_provider.html#creating-a-custom-user-provider)
-or use [API Platform's FOSUserBundle integration](fosuser-bundle.md) (not recommended).
+It is necessary to configure a user provider. You can either use the [Doctrine entity user provider](https://symfony.com/doc/current/security/user_provider.html#entity-user-provider) provided by Symfony \(recommended\), [create a custom user provider](https://symfony.com/doc/current/security/user_provider.html#creating-a-custom-user-provider) or use [API Platform's FOSUserBundle integration](fosuser-bundle.md) \(not recommended\).
 
 If you choose to use the Doctrine entity user provider, start by [creating your `User` class](https://symfony.com/doc/current/security.html#a-create-your-user-class).
 
@@ -92,11 +90,9 @@ authentication_token:
     methods: ['POST']
 ```
 
-If you want to avoid loading the `User` entity from database each time a JWT token needs to be authenticated, you may consider using
-the [database-less user provider](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/8-jwt-user-provider.md) provided by LexikJWTAuthenticationBundle. However, it means you will have to fetch the `User` entity from the database yourself as needed (probably through the Doctrine EntityManager).
+If you want to avoid loading the `User` entity from database each time a JWT token needs to be authenticated, you may consider using the [database-less user provider](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/8-jwt-user-provider.md) provided by LexikJWTAuthenticationBundle. However, it means you will have to fetch the `User` entity from the database yourself as needed \(probably through the Doctrine EntityManager\).
 
-Refer to the section on [Security](security.md) to learn how to control access to API resources and operations. You may
-also want to [configure Swagger UI for JWT authentication](#documenting-the-authentication-mechanism-with-swaggeropen-api).
+Refer to the section on [Security](security.md) to learn how to control access to API resources and operations. You may also want to [configure Swagger UI for JWT authentication](jwt.md#documenting-the-authentication-mechanism-with-swaggeropen-api).
 
 ### Adding Authentication to an API Which Uses a Path Prefix
 
@@ -157,19 +153,17 @@ api_platform:
 
 The "Authorize" button will automatically appear in Swagger UI.
 
-![Screenshot of API Platform with Authorize button](images/JWTAuthorizeButton.png)
+![Screenshot of API Platform with Authorize button](../.gitbook/assets/jwtauthorizebutton.png)
 
 ### Adding a New API Key
 
-All you have to do is configure the API key in the `value` field.
-By default, [only the authorization header mode is enabled](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.md#2-use-the-token) in LexikJWTAuthenticationBundle.
-You must set the [JWT token](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.md#1-obtain-the-token) as below and click on the "Authorize" button.
+All you have to do is configure the API key in the `value` field. By default, [only the authorization header mode is enabled](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.md#2-use-the-token) in LexikJWTAuthenticationBundle. You must set the [JWT token](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.md#1-obtain-the-token) as below and click on the "Authorize" button.
 
-```
+```text
 Bearer MY_NEW_TOKEN
 ```
 
-![Screenshot of API Platform with the configuration API Key](images/JWTConfigureApiKey.png)
+![Screenshot of API Platform with the configuration API Key](../.gitbook/assets/jwtconfigureapikey.png)
 
 ## Testing with Behat
 
@@ -237,3 +231,4 @@ default:
 ```
 
 Finally, mark your scenarios with the `@login` annotation to automatically add a valid `Authorization` header, and with `@logout` to be sure to destroy the token after this scenario.
+

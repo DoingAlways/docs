@@ -1,6 +1,8 @@
-# GraphQL Support
+# graphql
 
-## Overall View
+## GraphQL Support
+
+### Overall View
 
 [GraphQL](http://graphql.org/) is a query language made to communicate with an API and therefore is an alternative to REST.
 
@@ -10,9 +12,9 @@ API Platform creates a REST API by default. But you can choose to enable GraphQL
 
 Once enabled, you have nothing to do: your schema describing your API is automatically built and your GraphQL endpoint is ready to go!
 
-## Enabling GraphQL
+### Enabling GraphQL
 
-To enable GraphQL and its IDE (GraphiQL and GraphQL Playground) in your API, simply require the [graphql-php](https://webonyx.github.io/graphql-php/) package using Composer and clear the cache one more time:
+To enable GraphQL and its IDE \(GraphiQL and GraphQL Playground\) in your API, simply require the [graphql-php](https://webonyx.github.io/graphql-php/) package using Composer and clear the cache one more time:
 
 ```bash
 docker-compose exec php composer req webonyx/graphql-php && bin/console cache:clear
@@ -20,10 +22,9 @@ docker-compose exec php composer req webonyx/graphql-php && bin/console cache:cl
 
 You can now use GraphQL at the endpoint: `https://localhost:8443/graphql`.
 
-*Note:* If you used [Symfony Flex to install API Platform](../distribution/index.md#using-symfony-flex-and-composer-advanced-users),
-the GraphQL endpoint will be: `https://localhost:8443/api/graphql`.
+_Note:_ If you used [Symfony Flex to install API Platform](../distribution/index.md#using-symfony-flex-and-composer-advanced-users), the GraphQL endpoint will be: `https://localhost:8443/api/graphql`.
 
-## GraphiQL
+### GraphiQL
 
 If Twig is installed in your project, go to the GraphQL endpoint with your browser. You will see a nice interface provided by GraphiQL to interact with your API.
 
@@ -40,7 +41,7 @@ api_platform:
 # ...
 ```
 
-### Add another Location for GraphiQL
+#### Add another Location for GraphiQL
 
 If you want to add a different location besides `/graphql/graphiql`, you can do it like this:
 
@@ -51,7 +52,7 @@ graphiql:
     controller: api_platform.graphql.action.graphiql
 ```
 
-## GraphQL Playground
+### GraphQL Playground
 
 Another IDE is by default included in API Platform: GraphQL Playground.
 
@@ -68,7 +69,7 @@ api_platform:
 # ...
 ```
 
-### Add another Location for GraphQL Playground
+#### Add another Location for GraphQL Playground
 
 You can add a different location besides `/graphql/graphql_playground`:
 
@@ -79,7 +80,7 @@ graphql_playground:
     controller: api_platform.graphql.action.graphql_playground
 ```
 
-## Modifying or Disabling the Default IDE
+### Modifying or Disabling the Default IDE
 
 When going to the GraphQL endpoint, you can choose to launch the IDE you want.
 
@@ -102,17 +103,15 @@ api_platform:
 # ...
 ```
 
-## Queries
+### Queries
 
 If you don't know what queries are yet, the documentation about them is [here](https://graphql.org/learn/queries/).
 
-For each resource, two queries are available: one for retrieving an item and the other one for the collection.
-For example, if you have a `Book` resource, the queries `book` and `books` can be used.
+For each resource, two queries are available: one for retrieving an item and the other one for the collection. For example, if you have a `Book` resource, the queries `book` and `books` can be used.
 
-### Global Object Identifier
+#### Global Object Identifier
 
-When querying an item, you need to pass an identifier as argument. Following the [Relay Global Object Identification Specification](https://facebook.github.io/relay/graphql/objectidentification.htm),
-the identifier needs to be globally unique. In API Platform, this argument is represented as an [IRI (Internationalized Resource Identifier)](https://www.w3.org/TR/ld-glossary/#internationalized-resource-identifier).
+When querying an item, you need to pass an identifier as argument. Following the [Relay Global Object Identification Specification](https://facebook.github.io/relay/graphql/objectidentification.htm), the identifier needs to be globally unique. In API Platform, this argument is represented as an [IRI \(Internationalized Resource Identifier\)](https://www.w3.org/TR/ld-glossary/#internationalized-resource-identifier).
 
 For example, to query a book having as identifier `89`, you have to run the following:
 
@@ -127,10 +126,9 @@ For example, to query a book having as identifier `89`, you have to run the foll
 
 Note that in this example, we're retrieving two fields: `title` and `isbn`.
 
-### Pagination
+#### Pagination
 
-API Platform natively enables a cursor-based pagination for collections.
-It supports [GraphQL's Complete Connection Model](https://graphql.org/learn/pagination/#complete-connection-model) and is compatible with [Relay's Cursor Connections Specification](https://facebook.github.io/relay/graphql/connections.htm).
+API Platform natively enables a cursor-based pagination for collections. It supports [GraphQL's Complete Connection Model](https://graphql.org/learn/pagination/#complete-connection-model) and is compatible with [Relay's Cursor Connections Specification](https://facebook.github.io/relay/graphql/connections.htm).
 
 Here is an example query leveraging the pagination system:
 
@@ -157,8 +155,7 @@ The two parameters `first` and `after` are necessary to make the paginated query
 * `first` corresponds to the items per page starting from the beginning;
 * `after` corresponds to the `cursor` from which the items are returned.
 
-The current page always has an `endCursor` present in the `pageInfo` field.
-To get the next page, you would add the `endCursor` from the current page as the `after` parameter.
+The current page always has an `endCursor` present in the `pageInfo` field. To get the next page, you would add the `endCursor` from the current page as the `after` parameter.
 
 ```graphql
 {
@@ -167,10 +164,9 @@ To get the next page, you would add the `endCursor` from the current page as the
 }
 ```
 
-When the property `hasNextPage` of the `pageInfo` field is false, you've reached the last page.
-If you move forward, you'll end up having an empty result.
+When the property `hasNextPage` of the `pageInfo` field is false, you've reached the last page. If you move forward, you'll end up having an empty result.
 
-### Custom Queries
+#### Custom Queries
 
 To create a custom query, first of all you need to create its resolver.
 
@@ -204,7 +200,7 @@ final class BookCollectionResolver implements QueryCollectionResolverInterface
 }
 ```
 
-If you use autoconfiguration (the default Symfony configuration) in your application, then you are done!
+If you use autoconfiguration \(the default Symfony configuration\) in your application, then you are done!
 
 Else, you need to tag your resolver like this:
 
@@ -297,19 +293,14 @@ class Book
 }
 ```
 
-As you can see, it's possible to define your own arguments for your custom queries.
-They are following the GraphQL type system.
-If you don't define the `args` property, it will be the default ones (for example `id` for an item).
+As you can see, it's possible to define your own arguments for your custom queries. They are following the GraphQL type system. If you don't define the `args` property, it will be the default ones \(for example `id` for an item\).
 
-If you don't want API Platform to retrieve the item for you, disable the `read` stage like in `withDefaultArgsNotRetrievedQuery`.
-Some other stages [can be disabled](#disabling-resolver-stages).
-Another option would be to make sure there is no `id` argument.
-This is the case for `notRetrievedQuery` (empty args).
-Conversely, if you need to add custom arguments, make sure `id` is added among the arguments if you need the item to be retrieved automatically.
+If you don't want API Platform to retrieve the item for you, disable the `read` stage like in `withDefaultArgsNotRetrievedQuery`. Some other stages [can be disabled](graphql.md#disabling-resolver-stages). Another option would be to make sure there is no `id` argument. This is the case for `notRetrievedQuery` \(empty args\). Conversely, if you need to add custom arguments, make sure `id` is added among the arguments if you need the item to be retrieved automatically.
 
 Note also that:
-- If you have added your [own custom types](#custom-types), you can use them directly for your arguments types (it's the case here for `DateTime`).
-- You can also add a custom description for your custom arguments. You can see the [field arguments documentation](https://webonyx.github.io/graphql-php/type-system/object-types/#field-arguments) for more options.
+
+* If you have added your [own custom types](graphql.md#custom-types), you can use them directly for your arguments types \(it's the case here for `DateTime`\).
+* You can also add a custom description for your custom arguments. You can see the [field arguments documentation](https://webonyx.github.io/graphql-php/type-system/object-types/#field-arguments) for more options.
 
 The arguments you have defined or the default ones and their value will be in `$context['args']` of your resolvers.
 
@@ -343,18 +334,17 @@ You custom queries will be available like this:
 }
 ```
 
-# Mutations
+## Mutations
 
 If you don't know what mutations are yet, the documentation about them is [here](https://graphql.org/learn/queries/#mutations).
 
-For each resource, three mutations are available: one for creating it (`create`), one for updating it (`update`) and one for deleting it (`delete`).
+For each resource, three mutations are available: one for creating it \(`create`\), one for updating it \(`update`\) and one for deleting it \(`delete`\).
 
-When updating or deleting a resource, you need to pass the **IRI** of the resource as argument. See [Global Object Identifier](#global-object-identifier) for more information.
+When updating or deleting a resource, you need to pass the **IRI** of the resource as argument. See [Global Object Identifier](graphql.md#global-object-identifier) for more information.
 
-### Client Mutation Id
+#### Client Mutation Id
 
-Following the [Relay Input Object Mutations Specification](https://facebook.github.io/relay/graphql/mutations.htm),
-you can pass a `clientMutationId` as argument and can ask its value as a field.
+Following the [Relay Input Object Mutations Specification](https://facebook.github.io/relay/graphql/mutations.htm), you can pass a `clientMutationId` as argument and can ask its value as a field.
 
 For example, if you delete a book:
 
@@ -366,9 +356,9 @@ mutation DeleteBook($id: ID!, $clientMutationId: String!) {
 }
 ```
 
-### Custom Mutations
+#### Custom Mutations
 
-Creating custom mutations is comparable to creating [custom queries](#custom-queries).
+Creating custom mutations is comparable to creating [custom queries](graphql.md#custom-queries).
 
 Create your resolver:
 
@@ -400,12 +390,9 @@ final class BookMutationResolver implements MutationResolverInterface
 }
 ```
 
-As you can see, depending on how you configure your custom mutation in the resource, the item is retrieved or not.
-For instance, if you don't set an `id` argument or if you disable the `read` or the `deserialize` stage (other stages [can also be disabled](#disabling-resolver-stages)),
-the received item will be `null`.
+As you can see, depending on how you configure your custom mutation in the resource, the item is retrieved or not. For instance, if you don't set an `id` argument or if you disable the `read` or the `deserialize` stage \(other stages [can also be disabled](graphql.md#disabling-resolver-stages)\), the received item will be `null`.
 
-Likewise, if you don't want your item to be persisted by API Platform,
-you can return `null` instead of the mutated item (be careful: the response will also be `null`) or disable the `write` stage.
+Likewise, if you don't want your item to be persisted by API Platform, you can return `null` instead of the mutated item \(be careful: the response will also be `null`\) or disable the `write` stage.
 
 Don't forget the resolver is a service and you can inject the dependencies you want.
 
@@ -445,8 +432,7 @@ class Book
 }
 ```
 
-As the custom queries, you can define your own arguments if you don't want to use the default ones (extracted from your resource).
-The only difference with them is that, even if you define your own arguments, the `clientMutationId` will always be set.
+As the custom queries, you can define your own arguments if you don't want to use the default ones \(extracted from your resource\). The only difference with them is that, even if you define your own arguments, the `clientMutationId` will always be set.
 
 The arguments will be in `$context['args']['input']` of your resolvers.
 
@@ -482,24 +468,23 @@ Your custom mutations will be available like this:
 }
 ```
 
-## Workflow of the Resolvers
+### Workflow of the Resolvers
 
 API Platform resolves the queries and mutations by using its own **resolvers**.
 
-Even if you create your [custom queries](#custom-queries) or your [custom mutations](#custom-mutations),
-these resolvers will be used and yours will be called at the right time.
+Even if you create your [custom queries](graphql.md#custom-queries) or your [custom mutations](graphql.md#custom-mutations), these resolvers will be used and yours will be called at the right time.
 
 Each resolver follows a workflow composed of **stages**.
 
 The schema below describes them:
 
-![Resolvers Workflow](images/diagrams/resolvers-workflow.svg)
+![Resolvers Workflow](../.gitbook/assets/resolvers-workflow.svg)
 
 Each stage corresponds to a service. It means you can take control of the workflow wherever you want by decorating them!
 
 Here is an example of the decoration of the write stage, for instance if you want to persist your data as you want.
 
-Create your *WriteStage*:
+Create your _WriteStage_:
 
 ```php
 <?php
@@ -542,19 +527,19 @@ services:
         decorates: api_platform.graphql.resolver.stage.write
 ```
 
-### Disabling Resolver Stages
+#### Disabling Resolver Stages
 
 If you need to, you can disable some stages done by the resolvers, for instance if you don't want your data to be validated.
 
 The following table lists the stages you can disable in your resource configuration.
 
-Attribute     | Type   | Default | Description
---------------|--------|---------|-------------
-`read`        | `bool` | `true`  | Enables or disables the reading of data
-`deserialize` | `bool` | `true`  | Enables or disables the deserialization of data (mutation only)
-`validate`    | `bool` | `true`  | Enables or disables the validation of the denormalized data (mutation only)
-`write`       | `bool` | `true`  | Enables or disables the writing of data into the persistence system (mutation only)
-`serialize`   | `bool` | `true`  | Enables or disables the serialization of data
+| Attribute | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `read` | `bool` | `true` | Enables or disables the reading of data |
+| `deserialize` | `bool` | `true` | Enables or disables the deserialization of data \(mutation only\) |
+| `validate` | `bool` | `true` | Enables or disables the validation of the denormalized data \(mutation only\) |
+| `write` | `bool` | `true` | Enables or disables the writing of data into the persistence system \(mutation only\) |
+| `serialize` | `bool` | `true` | Enables or disables the serialization of data |
 
 A stage can be disabled at the operation level:
 
@@ -578,7 +563,7 @@ class Book
 }
 ```
 
-Or at the resource attributes level (will be also applied in REST and for all operations):
+Or at the resource attributes level \(will be also applied in REST and for all operations\):
 
 ```php
 <?php
@@ -601,14 +586,13 @@ class Book
 }
 ```
 
-## Filters
+### Filters
 
 Filters are supported out-of-the-box. Follow the [filters](filters.md) documentation and your filters will be available as arguments of queries.
 
 However you don't necessarily have the same needs for your GraphQL endpoint as for your REST one.
 
-In the `ApiResource` declaration, you can choose to decorrelate the GraphQL filters in `query` of the `graphql` attribute.
-In order to keep the default behavior (possibility to fetch, delete, update or create), define all the operations (`query`, `delete`, `update` and `create`).
+In the `ApiResource` declaration, you can choose to decorrelate the GraphQL filters in `query` of the `graphql` attribute. In order to keep the default behavior \(possibility to fetch, delete, update or create\), define all the operations \(`query`, `delete`, `update` and `create`\).
 
 For example, this entity will have a search filter for REST and a date filter for GraphQL:
 
@@ -641,9 +625,9 @@ class Offer
 }
 ```
 
-### Filtering on Nested Properties
+#### Filtering on Nested Properties
 
-Unlike for REST, all built-in filters support nested properties using the underscore (`_`) syntax instead of the dot (`.`) syntax, e.g.:
+Unlike for REST, all built-in filters support nested properties using the underscore \(`_`\) syntax instead of the dot \(`.`\) syntax, e.g.:
 
 ```php
 <?php
@@ -667,8 +651,7 @@ class Offer
 }
 ```
 
-The above allows you to find offers by their respective product's color like for the REST Api.
-You can then filter using the following syntax:
+The above allows you to find offers by their respective product's color like for the REST Api. You can then filter using the following syntax:
 
 ```graphql
 {
@@ -703,9 +686,11 @@ Or order your results like:
   }
 }
 ```
+
 Another difference with the REST API filters is that the keyword `_list` must be used instead of the traditional `[]` to filter over multiple values.
 
 For example, if you want to search the offers with a green or a red product you can use the following syntax:
+
 ```graphql
 {
   offers(product_color_list: ["red", "green"]) {
@@ -722,10 +707,9 @@ For example, if you want to search the offers with a green or a red product you 
 }
 ```
 
-## Pagination
+### Pagination
 
-API Platform natively enables a cursor-based pagination for collections.
-It supports [GraphQL's Complete Connection Model](https://graphql.org/learn/pagination/#complete-connection-model) and is compatible with [Relay's Cursor Connections Specification](https://facebook.github.io/relay/graphql/connections.htm).
+API Platform natively enables a cursor-based pagination for collections. It supports [GraphQL's Complete Connection Model](https://graphql.org/learn/pagination/#complete-connection-model) and is compatible with [Relay's Cursor Connections Specification](https://facebook.github.io/relay/graphql/connections.htm).
 
 Here is an example query leveraging the pagination system:
 
@@ -756,7 +740,6 @@ More precisely:
 
 * `first` corresponds to the items per page starting from the beginning;
 * `after` corresponds to the `cursor` from which the items are returned.
-
 * `last` corresponds to the items per page starting from the end;
 * `before` corresponds to the `cursor` from which the items are returned, from a backwards point of view.
 
@@ -780,17 +763,15 @@ For the previous page, you would add the `startCursor` from the current page as 
 }
 ```
 
-How do you know when you have reached the last page? It is the aim of the property `hasNextPage` or `hasPreviousPage` in `pageInfo`.
-When it is false, you know it is the last page and moving forward or backward will give you an empty result.
+How do you know when you have reached the last page? It is the aim of the property `hasNextPage` or `hasPreviousPage` in `pageInfo`. When it is false, you know it is the last page and moving forward or backward will give you an empty result.
 
-## Security (`access_control`)
+### Security \(`access_control`\)
 
 To add a security layer to your queries and mutations, follow the [security](security.md) documentation.
 
 If your security needs differ between REST and GraphQL, add the particular parts in the `graphql` key.
 
-In the example below, we want the same security rules as we have in REST, but we also want to allow an admin to delete a book only in GraphQL.
-Please note that, it's not possible to update a book in GraphQL because the `update` operation is not defined.
+In the example below, we want the same security rules as we have in REST, but we also want to allow an admin to delete a book only in GraphQL. Please note that, it's not possible to update a book in GraphQL because the `update` operation is not defined.
 
 ```php
 <?php
@@ -822,13 +803,13 @@ class Book
 }
 ```
 
-## Serialization Groups
+### Serialization Groups
 
 You may want to restrict some resource's attributes to your GraphQL clients.
 
 As described in the [serialization process](serialization.md) documentation, you can use serialization groups to expose only the attributes you want in queries or in mutations.
 
-If the (de)normalization context between GraphQL and REST is different, use the `graphql` key to change it.
+If the \(de\)normalization context between GraphQL and REST is different, use the `graphql` key to change it.
 
 Note that:
 
@@ -879,10 +860,9 @@ class Book
 
 In this case, the REST endpoint will be able to get the two attributes of the book and to modify only its name.
 
-The GraphQL endpoint will be able to query only the name. It will only be able to create a book with an author.
-When doing this mutation, the author of the created book will not be returned (the name will be instead).
+The GraphQL endpoint will be able to query only the name. It will only be able to create a book with an author. When doing this mutation, the author of the created book will not be returned \(the name will be instead\).
 
-## Custom Types
+### Custom Types
 
 You might need to add your own types to your GraphQL application.
 
@@ -969,10 +949,9 @@ final class DateTimeType extends ScalarType implements TypeInterface
 
 You can also check the documentation of [graphql-php](https://webonyx.github.io/graphql-php/type-system/scalar-types/#writing-custom-scalar-types).
 
-The big difference in API Platform is that the value is already serialized when it's received in your type class.
-Similarly, you would not want to denormalize your parsed value since it will be done by API Platform later.
+The big difference in API Platform is that the value is already serialized when it's received in your type class. Similarly, you would not want to denormalize your parsed value since it will be done by API Platform later.
 
-If you use autoconfiguration (the default Symfony configuration) in your application, then you are done!
+If you use autoconfiguration \(the default Symfony configuration\) in your application, then you are done!
 
 Else, you need to tag your type class like this:
 
@@ -987,12 +966,11 @@ services:
 
 Your custom type is now registered and is available in the `TypesContainer`.
 
-To use it please [modify the extracted types](#modify-the-extracted-types) or use it directly in [custom queries](#custom-queries) or [custom mutations](#custom-mutations).
+To use it please [modify the extracted types](graphql.md#modify-the-extracted-types) or use it directly in [custom queries](graphql.md#custom-queries) or [custom mutations](graphql.md#custom-mutations).
 
-## Modify the Extracted Types
+### Modify the Extracted Types
 
-The GraphQL schema and its types are extracted from your resources.
-In some cases, you would want to modify the extracted types for instance to use your custom ones.
+The GraphQL schema and its types are extracted from your resources. In some cases, you would want to modify the extracted types for instance to use your custom ones.
 
 To do so, you need to decorate the `api_platform.graphql.type_converter` service:
 
@@ -1054,9 +1032,9 @@ if (Type::BUILTIN_TYPE_OBJECT === $type->getBuiltinType()
 
 All `DateTimeInterface` properties will have the `DateTime` type in this example.
 
-## Changing the Serialization Context Dynamically
+### Changing the Serialization Context Dynamically
 
-[As REST](serialization.md#changing-the-serialization-context-dynamically), it's possible to add dynamically a (de)serialization group when resolving a query or a mutation.
+[As REST](serialization.md#changing-the-serialization-context-dynamically), it's possible to add dynamically a \(de\)serialization group when resolving a query or a mutation.
 
 There are some differences though.
 
@@ -1098,9 +1076,9 @@ final class BookContextBuilder implements SerializerContextBuilderInterface
 }
 ```
 
-## Export the Schema in SDL
+### Export the Schema in SDL
 
-You may need to export your schema in SDL (Schema Definition Language) to import it in some tools.
+You may need to export your schema in SDL \(Schema Definition Language\) to import it in some tools.
 
 The `api:graphql:export` command is provided to do so:
 
@@ -1113,3 +1091,4 @@ Since the command prints the schema to the output if you don't use the `-o` opti
 ```bash
 docker-compose exec php bin/console api:graphql:export > path/in/host/schema.graphql
 ```
+

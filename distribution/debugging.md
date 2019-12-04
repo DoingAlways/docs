@@ -1,34 +1,30 @@
 # Debugging
 
-The default Docker stack is shipped without a Xdebug stage. It's easy
-though to add [Xdebug](https://xdebug.org/) to your project, for development
-purposes such as debugging tests or remote API requests.
+The default Docker stack is shipped without a Xdebug stage. It's easy though to add [Xdebug](https://xdebug.org/) to your project, for development purposes such as debugging tests or remote API requests.
 
 ## Add a Development Stage to the Dockerfile
 
-To avoid deploying API Platform to production with an active Xdebug extension,
-it's recommended to add a custom stage to the end of the `api/Dockerfile`.
+To avoid deploying API Platform to production with an active Xdebug extension, it's recommended to add a custom stage to the end of the `api/Dockerfile`.
 
-```Dockerfile
+```text
 # api/Dockerfile
 FROM api_platform_php as api_platform_php_dev
 
 ARG XDEBUG_VERSION=2.7.2
 RUN set -eux; \
-	apk add --no-cache --virtual .build-deps $PHPIZE_DEPS; \
-	pecl install xdebug-$XDEBUG_VERSION; \
-	docker-php-ext-enable xdebug; \
-	apk del .build-deps
+    apk add --no-cache --virtual .build-deps $PHPIZE_DEPS; \
+    pecl install xdebug-$XDEBUG_VERSION; \
+    docker-php-ext-enable xdebug; \
+    apk del .build-deps
 ```
 
 ## Configure Xdebug with Docker Compose Override
 
-Using an [override](https://docs.docker.com/compose/reference/overview/#specifying-multiple-compose-files) file named 
-`docker-compose.override.yml` ensures that the production configuration remains untouched.
+Using an [override](https://docs.docker.com/compose/reference/overview/#specifying-multiple-compose-files) file named `docker-compose.override.yml` ensures that the production configuration remains untouched.
 
 As an example, an override could look like this:
 
-```yml
+```text
 version: "3.4"
 
 services:
@@ -52,12 +48,12 @@ services:
 
 ## Troubleshooting
 
-Inspect the installation with the following command. The requested Xdebug
-version should be displayed in the output.
+Inspect the installation with the following command. The requested Xdebug version should be displayed in the output.
 
-```console
+```text
 $ docker-compose exec php php --version
 
 PHP …
     with Xdebug v2.7.2 …
 ```
+

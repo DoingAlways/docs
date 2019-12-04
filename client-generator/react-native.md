@@ -1,11 +1,10 @@
 # React Native generator
 
-![List](images/react-native/client-generator-react-native-list.png) 
+![List](../.gitbook/assets/client-generator-react-native-list%20%281%29.png)
 
 ## Install
 
-To use this generator you need [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) (or [NPM](https://www.npmjs.com/)) installed.
-To run the command line tool, we also recommend using [npx](https://www.npmjs.com/package/npx).
+To use this generator you need [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) \(or [NPM](https://www.npmjs.com/)\) installed. To run the command line tool, we also recommend using [npx](https://www.npmjs.com/package/npx).
 
 Create a React Native application using [Expo CLI](https://docs.expo.io/versions/latest/workflow/expo-cli).
 
@@ -30,8 +29,7 @@ In the app directory, generate the files for the resource you want:
 $ npx @api-platform/client-generator https://demo.api-platform.com . --generator react-native --resource book
 ```
 
-Replace the URL with the entrypoint of your Hydra-enabled API.
-Omit the resource flag to generate files for all resource types exposed by the API.
+Replace the URL with the entrypoint of your Hydra-enabled API. Omit the resource flag to generate files for all resource types exposed by the API.
 
 Create a `Router.js` file to import all routes:
 
@@ -106,5 +104,5 @@ $ expo start
 
 ## Screenshots in iOS Simulator
 
-![List](images/react-native/client-generator-react-native-list.png) ![Show](images/react-native/client-generator-react-native-show.png)
-![Add](images/react-native/client-generator-react-native-add.png) ![Delete](images/react-native/client-generator-react-native-delete.png)
+![List](../.gitbook/assets/client-generator-react-native-list.png) ![Show](../.gitbook/assets/client-generator-react-native-show.png) ![Add](../.gitbook/assets/client-generator-react-native-add.png) ![Delete](../.gitbook/assets/client-generator-react-native-delete.png)
+

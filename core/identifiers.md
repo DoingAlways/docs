@@ -1,7 +1,6 @@
 # Identifiers
 
-Every item operation has an identifier in its URL. Although this identifier is usually a number, it can also be an `UUID`, a date, or the type of your choice.
-To help with your development experience, we introduced an identifier normalization process.
+Every item operation has an identifier in its URL. Although this identifier is usually a number, it can also be an `UUID`, a date, or the type of your choice. To help with your development experience, we introduced an identifier normalization process.
 
 ## Custom Identifier Normalizer
 
@@ -25,13 +24,12 @@ final class Person
      * @ApiProperty(identifier=true)
      */
     public $code;
-    
+
     // ...
 }
 ```
 
-Once registered as an `ApiResource`, having an existing person, it will be accessible through the following URL: `/people/110e8400-e29b-11d4-a716-446655440000`.
-Note that the property identifying our resource is named `code`.
+Once registered as an `ApiResource`, having an existing person, it will be accessible through the following URL: `/people/110e8400-e29b-11d4-a716-446655440000`. Note that the property identifying our resource is named `code`.
 
 Let's create a `DataProvider` for the `Person` entity:
 
@@ -101,7 +99,7 @@ final class UuidNormalizer implements DenormalizerInterface
 
 Tag this service as an `api_platform.identifier.denormalizer`:
 
-```xml
+```markup
   <service id="App\Identifier\UuidNormalizer" class="App\Identifier\UuidNormalizer" public="false">
       <tag name="api_platform.identifier.denormalizer" />
   </service>
@@ -116,11 +114,11 @@ services:
 
 Your `PersonDataProvider` will now work as expected!
 
-
 ## Supported Identifiers
 
 API Platform supports the following identifier types:
 
-  - `scalar` (string, integer)
-  - `\DateTime` (uses the symfony `DateTimeNormalizer` internally, see [DateTimeIdentifierNormalizer](https://github.com/api-platform/core/blob/master/src/Identifier/Normalizer/DateTimeIdentifierDenormalizer.php))
-  - `\Ramsey\Uuid\Uuid` (see [UuidNormalizer](https://github.com/api-platform/core/blob/master/src/Bridge/RamseyUuid/Identifier/Normalizer/UuidNormalizer.php))
+* `scalar` \(string, integer\)
+* `\DateTime` \(uses the symfony `DateTimeNormalizer` internally, see [DateTimeIdentifierNormalizer](https://github.com/api-platform/core/blob/master/src/Identifier/Normalizer/DateTimeIdentifierDenormalizer.php)\)
+* `\Ramsey\Uuid\Uuid` \(see [UuidNormalizer](https://github.com/api-platform/core/blob/master/src/Bridge/RamseyUuid/Identifier/Normalizer/UuidNormalizer.php)\)
+

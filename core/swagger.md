@@ -1,21 +1,18 @@
-# OpenAPI Specification Support (formerly Swagger)
+# OpenAPI Specification Support \(formerly Swagger\)
 
 API Platform natively support the [OpenAPI](https://www.openapis.org/) API specification format.
 
-![Screenshot](../distribution/images/swagger-ui-1.png)
+![Screenshot](../.gitbook/assets/swagger-ui-1.png)
 
-The specification of the API is available at the `/docs.json` path.
-By default, OpenAPI v2 is used.
-You can also get an OpenAPI v3-compliant version thanks to the `spec_version` query parameter: `/docs.json?spec_version=3`
+The specification of the API is available at the `/docs.json` path. By default, OpenAPI v2 is used. You can also get an OpenAPI v3-compliant version thanks to the `spec_version` query parameter: `/docs.json?spec_version=3`
 
-It also integrates a customized version of [Swagger UI](https://swagger.io/swagger-ui/) and [ReDoc](https://rebilly.github.io/ReDoc/), some nice tools to display the
-API documentation in a user friendly way.
+It also integrates a customized version of [Swagger UI](https://swagger.io/swagger-ui/) and [ReDoc](https://rebilly.github.io/ReDoc/), some nice tools to display the API documentation in a user friendly way.
 
 ## Using the OpenAPI Command
 
 You can also dump an OpenAPI specification for your API by using the following command:
 
-```
+```text
 $ docker-compose exec php bin/console api:openapi:export
 # OpenAPI v2, JSON format
 
@@ -34,11 +31,9 @@ $ docker-compose exec php bin/console api:openapi:export --output=swagger_docs.j
 
 ## Overriding the OpenAPI Specification
 
-Symfony allows to [decorate services](https://symfony.com/doc/current/service_container/service_decoration.html), here we
-need to decorate `api_platform.swagger.normalizer.documentation`.
+Symfony allows to [decorate services](https://symfony.com/doc/current/service_container/service_decoration.html), here we need to decorate `api_platform.swagger.normalizer.documentation`.
 
-In the following example, we will see how to override the title of the Swagger documentation and add a custom filter for
-the `GET` operation of `/foos` path.
+In the following example, we will see how to override the title of the Swagger documentation and add a custom filter for the `GET` operation of `/foos` path.
 
 ```yaml
 # api/config/services.yaml
@@ -78,16 +73,16 @@ final class SwaggerDecorator implements NormalizerInterface
         ];
 
 
-	// e.g. add a custom parameter
-	$docs['paths']['/foos']['get']['parameters'][] = $customDefinition;
+    // e.g. add a custom parameter
+    $docs['paths']['/foos']['get']['parameters'][] = $customDefinition;
 
         // e.g. remove an existing parameter
         $docs['paths']['/foos']['get']['parameters'] = array_values(array_filter($docs['paths']['/foos']['get']['parameters'], function ($param){
             return $param['name'] !== 'bar';
         }));
 
-	// Override title
-	$docs['info']['title'] = 'My Api Foo';
+    // Override title
+    $docs['info']['title'] = 'My Api Foo';
 
         return $docs;
     }
@@ -101,8 +96,7 @@ final class SwaggerDecorator implements NormalizerInterface
 
 ## Using the OpenAPI and Swagger Contexts
 
-Sometimes you may want to change the information included in your OpenAPI documentation.
-The following configuration will give you total control over your OpenAPI definitions:
+Sometimes you may want to change the information included in your OpenAPI documentation. The following configuration will give you total control over your OpenAPI definitions:
 
 ```php
 <?php
@@ -157,7 +151,7 @@ class Product // The class name will be used to name exposed resources
      * )
      */
     public $timestamp;
-    
+
     // ...
 }
 ```
@@ -183,7 +177,8 @@ resources:
 ```
 
 This will produce the following Swagger documentation:
-```json
+
+```javascript
 {
   "swagger": "2.0",
   "basePath": "/",
@@ -213,13 +208,11 @@ This will produce the following Swagger documentation:
 }
 ```
 
-To pass a context to the OpenAPI **v3** generator, use the `openapi_context` attribute (notice the prefix: `openapi_` instead of `swagger_`).
+To pass a context to the OpenAPI **v3** generator, use the `openapi_context` attribute \(notice the prefix: `openapi_` instead of `swagger_`\).
 
 ## Changing the Name of a Definition
 
-API Platform generates a definition name based on the serializer `groups` defined
-in the (`de`)`normalization_context`. It's possible to override the name
-thanks to the `swagger_definition_name` option:
+API Platform generates a definition name based on the serializer `groups` defined in the \(`de`\)`normalization_context`. It's possible to override the name thanks to the `swagger_definition_name` option:
 
 ```php
 /**
@@ -239,7 +232,7 @@ class User
 }
 ```
 
-It's also possible to re-use the (`de`)`normalization_context`:
+It's also possible to re-use the \(`de`\)`normalization_context`:
 
 ```php
 /**
@@ -296,7 +289,7 @@ resources:
 
 or with XML:
 
-```xml
+```markup
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources xmlns="https://api-platform.com/schema/metadata"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -342,7 +335,7 @@ or with XML:
 </resources>
 ```
 
-![Impact on swagger ui](../distribution/images/swagger-ui-2.png)
+![Impact on swagger ui](../.gitbook/assets/swagger-ui-2.png)
 
 Again, you can use the `openapi_context` key instead of the `swagger_context` one to tweak the OpenAPI **v3** specification.
 
@@ -375,7 +368,7 @@ Change `/docs` to the URI you wish Swagger to be accessible on.
 
 As described [in the Symfony documentation](https://symfony.com/doc/current/templating/overriding.html), it's possible to override the Twig template that loads Swagger UI and renders the documentation:
 
-```twig
+```text
 {# templates/bundles/ApiPlatformBundle/SwaggerUi/index.html.twig #}
 <!DOCTYPE html>
 <html>
@@ -390,7 +383,7 @@ You may want to copy the [one shipped with API Platform](https://github.com/api-
 
 ## Compatibilily Layer with Amazon API Gateway
 
-[AWS API Gateway](https://aws.amazon.com/api-gateway/) supports OpenAPI partially, but it [requires some changes](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-known-issues.html).
-Fortunately, API Platform provides a way to be compatible with Amazon API Gateway.
+[AWS API Gateway](https://aws.amazon.com/api-gateway/) supports OpenAPI partially, but it [requires some changes](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-known-issues.html). Fortunately, API Platform provides a way to be compatible with Amazon API Gateway.
 
 To enable API Gateway compatibility on your OpenAPI docs, add `api_gateway=true` as query parameter: `http://www.example.com/docs.json?api_gateway=true`
+

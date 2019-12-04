@@ -1,6 +1,6 @@
 # Next.js Generator
 
-![List screenshot](images/nextjs/client-generator-nextjs-list.png)
+![List screenshot](../.gitbook/assets/client-generator-nextjs-list.png)
 
 The Next.js Client Generator generates routes and components for Server Side Rendered applications using [Next.js](https://zeit.co/blog/next)
 
@@ -8,7 +8,7 @@ The Next.js Client Generator generates routes and components for Server Side Ren
 
 ### Next + Express Server
 
-Create a [Next.js application with express server](https://github.com/zeit/next.js/tree/canary/examples/custom-server-express). The easiest way is to execute:  
+Create a [Next.js application with express server](https://github.com/zeit/next.js/tree/canary/examples/custom-server-express). The easiest way is to execute:
 
 ```bash
 $ npx create-next-app --example custom-server-express your-app-name
@@ -18,13 +18,13 @@ $ yarn create next-app --example custom-server-express your-app-name
 
 ### Enabling Typescript
 
-Install typescript dependencies  
+Install typescript dependencies
 
 ```bash
 $ yarn add @types/next @zeit/next-typescript
 ```
 
-Enable Typescript in your Next.js configuration file (`next.config.js`):
+Enable Typescript in your Next.js configuration file \(`next.config.js`\):
 
 ```javascript
 const withTypescript = require('@zeit/next-typescript');
@@ -33,7 +33,8 @@ module.exports = withTypescript();
 ```
 
 Create a `.babelrc` file to store Babel configuration:
-```json
+
+```javascript
 {
   "presets": [
     "next/babel",
@@ -43,7 +44,8 @@ Create a `.babelrc` file to store Babel configuration:
 ```
 
 Create a `tsconfig.json` file to store Typescript configuration:
-```json
+
+```javascript
 {
   "compilerOptions": {
     "allowJs": true,
@@ -78,7 +80,8 @@ $ yarn add lodash.get lodash.has @types/lodash isomorphic-unfetch
 
 ## Starting the Project
 
-You can launch the server with 
+You can launch the server with
+
 ```bash
 $ yarn dev
 ```
@@ -100,10 +103,10 @@ If your express server is compatible with the `custom-server-express` Next.js ex
 $ npx @api-platform/client-generator https://demo.api-platform.com src/ --generator next --server-path ./server.js
 ```
 
-Go to `https://localhost:3000/books/` to start using your app.
-That's it!
+Go to `https://localhost:3000/books/` to start using your app. That's it!
 
 ## Screenshots
 
-![List](images/nextjs/client-generator-nextjs-list.png)  
-![Show](images/nextjs/client-generator-nextjs-show.png)
+![List](../.gitbook/assets/client-generator-nextjs-list%20%281%29.png)  
+![Show](../.gitbook/assets/client-generator-nextjs-show.png)
+

@@ -2,15 +2,9 @@
 
 ## Installing API Platform Core
 
-If you are starting a new project, the easiest way to get API Platform up is to install the [API Platform Distribution](../distribution/index.md).
-It comes with the API Platform Core library integrated with [the Symfony framework](https://symfony.com), [the schema generator](../schema-generator/),
-[Doctrine ORM](http://www.doctrine-project.org), [Elasticsearch-PHP](https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/index.html),
-[NelmioCorsBundle](https://github.com/nelmio/NelmioCorsBundle) and [Behat](http://behat.org).
-[Doctrine MongoDB ODM](https://www.doctrine-project.org/projects/mongodb-odm.html) can also be enabled by following the [MongoDB documentation](mongodb.md).
-Basically, it is a Symfony edition packaged with the best tools to develop a REST API and sensible default settings.
+If you are starting a new project, the easiest way to get API Platform up is to install the [API Platform Distribution](../distribution/index.md). It comes with the API Platform Core library integrated with [the Symfony framework](https://symfony.com), [the schema generator](https://github.com/DoingAlways/docs/tree/e497997a177813f5d08d60179d55884c0ef9273b/schema-generator/README.md), [Doctrine ORM](http://www.doctrine-project.org), [Elasticsearch-PHP](https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/index.html), [NelmioCorsBundle](https://github.com/nelmio/NelmioCorsBundle) and [Behat](http://behat.org). [Doctrine MongoDB ODM](https://www.doctrine-project.org/projects/mongodb-odm.html) can also be enabled by following the [MongoDB documentation](mongodb.md). Basically, it is a Symfony edition packaged with the best tools to develop a REST API and sensible default settings.
 
-Alternatively, you can use [Composer](http://getcomposer.org) to install the standalone bundle in an existing Symfony Flex
-project:
+Alternatively, you can use [Composer](http://getcomposer.org) to install the standalone bundle in an existing Symfony Flex project:
 
 `composer require api`
 
@@ -18,15 +12,11 @@ There are no mandatory configuration options although [many settings are availab
 
 ## Before Reading this Documentation
 
-If you haven't read it already, take a look at [the Getting Started guide](../distribution/index.md).
-This tutorial covers basic concepts required to understand how API Platform works including how it implements the REST pattern
-and what [JSON-LD](http://json-ld.org/) and [Hydra](http://www.hydra-cg.com/) formats are.
+If you haven't read it already, take a look at [the Getting Started guide](../distribution/index.md). This tutorial covers basic concepts required to understand how API Platform works including how it implements the REST pattern and what [JSON-LD](http://json-ld.org/) and [Hydra](http://www.hydra-cg.com/) formats are.
 
 ## Mapping the Entities
 
-API Platform Core is able to automatically expose entities mapped as "API resources" through a REST API supporting CRUD
-operations.
-To expose your entities, you can use Docblock annotations, XML and YAML configuration files.
+API Platform Core is able to automatically expose entities mapped as "API resources" through a REST API supporting CRUD operations. To expose your entities, you can use Docblock annotations, XML and YAML configuration files.
 
 Here is an example of entities mapped using annotations which will be exposed through a REST API:
 
@@ -72,7 +62,7 @@ class Product // The class name will be used to name exposed resources
     {
         $this->offers = new ArrayCollection(); // Initialize $offers as a Doctrine collection
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,7 +81,7 @@ class Product // The class name will be used to name exposed resources
         $offer->product = null;
         $this->offers->removeElement($offer);
     }
-    
+
     // ...
 }
 ```
@@ -141,38 +131,29 @@ class Offer
 }
 ```
 
-It is the minimal configuration required to expose `Product` and `Offer` entities as JSON-LD documents through an hypermedia
-web API.
+It is the minimal configuration required to expose `Product` and `Offer` entities as JSON-LD documents through an hypermedia web API.
 
-If you are familiar with the Symfony ecosystem, you noticed that entity classes are also mapped with Doctrine ORM annotations
-and validation constraints from [the Symfony Validator Component](http://symfony.com/doc/current/book/validation.html).
-This isn't mandatory. You can use [your preferred persistence](data-providers.md) and [validation](validation.md) systems.
-However, API Platform Core has built-in support for those libraries and is able to use them without requiring any specific
-code or configuration to automatically persist and validate your data. They are a good default option and we encourage you to use
-them unless you know what you are doing.
+If you are familiar with the Symfony ecosystem, you noticed that entity classes are also mapped with Doctrine ORM annotations and validation constraints from [the Symfony Validator Component](http://symfony.com/doc/current/book/validation.html). This isn't mandatory. You can use [your preferred persistence](data-providers.md) and [validation](validation.md) systems. However, API Platform Core has built-in support for those libraries and is able to use them without requiring any specific code or configuration to automatically persist and validate your data. They are a good default option and we encourage you to use them unless you know what you are doing.
 
-Thanks to the mapping done previously, API Platform Core will automatically register the following REST [operations](operations.md)
-for resources of the product type:
+Thanks to the mapping done previously, API Platform Core will automatically register the following REST [operations](operations.md) for resources of the product type:
 
-*Product*
+_Product_
 
-Method | URL            | Description
--------|----------------|--------------------------------
-GET    | /products      | Retrieve the (paginated) collection
-POST   | /products      | Create a new product
-GET    | /products/{id} | Retrieve a product
-PUT    | /products/{id} | Update a product
-DELETE | /products/{id} | Delete a product
+| Method | URL | Description |
+| :--- | :--- | :--- |
+| GET | /products | Retrieve the \(paginated\) collection |
+| POST | /products | Create a new product |
+| GET | /products/{id} | Retrieve a product |
+| PUT | /products/{id} | Update a product |
+| DELETE | /products/{id} | Delete a product |
 
-The same operations are available for the offer method (routes will start with the `/offers` pattern).
-Route prefixes are built by pluralizing the name of the mapped entity class.
-It is also possible to override the naming convention using [operation path namings](operation-path-naming.md).
+The same operations are available for the offer method \(routes will start with the `/offers` pattern\). Route prefixes are built by pluralizing the name of the mapped entity class. It is also possible to override the naming convention using [operation path namings](operation-path-naming.md).
 
 As an alternative to annotations, you can map entity classes using XML or YAML:
 
 XML:
 
-```xml
+```markup
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- api/config/api_platform/resources.xml -->
 
@@ -219,9 +200,7 @@ If you want to serialize only a subset of your data, please refer to the [Serial
 
 **You're done!**
 
-You now have a fully featured API exposing your entities.
-Run the Symfony app (`bin/console server:run`) and browse the API entrypoint at `http://localhost:8000/api`.
+You now have a fully featured API exposing your entities. Run the Symfony app \(`bin/console server:run`\) and browse the API entrypoint at `http://localhost:8000/api`.
 
-Interact with the API using a REST client (we recommend [Postman](https://www.getpostman.com/)) or an Hydra-aware application
-(you should give [Hydra Console](https://github.com/lanthaler/HydraConsole) a try). Take
-a look at the usage examples in [the `features` directory](https://github.com/api-platform/core/tree/master/features).
+Interact with the API using a REST client \(we recommend [Postman](https://www.getpostman.com/)\) or an Hydra-aware application \(you should give [Hydra Console](https://github.com/lanthaler/HydraConsole) a try\). Take a look at the usage examples in [the `features` directory](https://github.com/api-platform/core/tree/master/features).
+

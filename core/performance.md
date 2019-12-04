@@ -2,27 +2,15 @@
 
 ## Enabling the Built-in HTTP Cache Invalidation System
 
-Exposing a hypermedia API has [many advantages](http://blog.theamazingrando.com/in-band-vs-out-of-band.html). One of
-them is the ability to know exactly which resources are included in HTTP responses created by the API. We used this
-specificity to make API Platform apps blazing fast.
+Exposing a hypermedia API has [many advantages](http://blog.theamazingrando.com/in-band-vs-out-of-band.html). One of them is the ability to know exactly which resources are included in HTTP responses created by the API. We used this specificity to make API Platform apps blazing fast.
 
-When the cache mechanism [is enabled](configuration.md), API Platform collects identifiers of every resource
-included in a given HTTP response (including lists, embedded documents and subresources) and returns them in a special
-HTTP header called [Cache-Tags](https://support.cloudflare.com/hc/en-us/articles/206596608-How-to-Purge-Cache-Using-Cache-Tags-Enterprise-only-).
+When the cache mechanism [is enabled](configuration.md), API Platform collects identifiers of every resource included in a given HTTP response \(including lists, embedded documents and subresources\) and returns them in a special HTTP header called [Cache-Tags](https://support.cloudflare.com/hc/en-us/articles/206596608-How-to-Purge-Cache-Using-Cache-Tags-Enterprise-only-).
 
-A [cache reverse proxy](https://en.wikipedia.org/wiki/Web_accelerator) supporting cache tags (Varnish, CloudFlare,
-Fastly…) must be put in front of the web server and store all responses returned by the API with a high
-[TTL](https://en.wikipedia.org/wiki/Time_to_live). When a resource is modified, API Platform takes care of purging all
-responses containing it in the proxy’s cache. It means that after the first request, all subsequent requests will not
-touch the web server, and will be served instantly from the cache. It also means that the content served will always be
-fresh, because the cache is purged in real time.
+A [cache reverse proxy](https://en.wikipedia.org/wiki/Web_accelerator) supporting cache tags \(Varnish, CloudFlare, Fastly…\) must be put in front of the web server and store all responses returned by the API with a high [TTL](https://en.wikipedia.org/wiki/Time_to_live). When a resource is modified, API Platform takes care of purging all responses containing it in the proxy’s cache. It means that after the first request, all subsequent requests will not touch the web server, and will be served instantly from the cache. It also means that the content served will always be fresh, because the cache is purged in real time.
 
-The support for most specific cases such as the invalidation of collections when a document is added or removed or for
-relationships and inverse relations is built-in.
+The support for most specific cases such as the invalidation of collections when a document is added or removed or for relationships and inverse relations is built-in.
 
-Integration with Varnish and Doctrine ORM is shipped with the core library, and [Varnish](https://varnish-cache.org/) is included in the [Docker setup](../distribution/index.md#using-the-official-distribution-recommended) provided with the
-distribution of API Platform.
-If you use the distribution, this feature works out of the box.
+Integration with Varnish and Doctrine ORM is shipped with the core library, and [Varnish](https://varnish-cache.org/) is included in the [Docker setup](../distribution/index.md#using-the-official-distribution-recommended) provided with the distribution of API Platform. If you use the distribution, this feature works out of the box.
 
 If you don't use the distribution, add the following configuration to enable the cache invalidation system:
 
@@ -133,17 +121,13 @@ class Book
 
 ## Enabling the Metadata Cache
 
-Computing metadata used by the bundle is a costly operation. Fortunately, metadata can be computed once and then cached.
-API Platform internally uses a [PSR-6](http://www.php-fig.org/psr/psr-6/) cache. If the Symfony Cache Component is available
-(the default in the official distribution), it automatically enables the support for the best cache adapter available.
+Computing metadata used by the bundle is a costly operation. Fortunately, metadata can be computed once and then cached. API Platform internally uses a [PSR-6](http://www.php-fig.org/psr/psr-6/) cache. If the Symfony Cache Component is available \(the default in the official distribution\), it automatically enables the support for the best cache adapter available.
 
-Best performance is achieved using [APCu](https://github.com/krakjoe/apcu). Be sure to have the APCu extension installed
-on your production server. API Platform will automatically use it.
+Best performance is achieved using [APCu](https://github.com/krakjoe/apcu). Be sure to have the APCu extension installed on your production server. API Platform will automatically use it.
 
-## Using PPM (PHP-PM)
+## Using PPM \(PHP-PM\)
 
-Response time of the API can be improved up to 15x by using [PHP Process Manager](https://github.com/php-pm/php-pm). If
-you want to use it on your project, follow the documentation dedicated to Symfony on the PPM website.
+Response time of the API can be improved up to 15x by using [PHP Process Manager](https://github.com/php-pm/php-pm). If you want to use it on your project, follow the documentation dedicated to Symfony on the PPM website.
 
 Keep in mind that PPM is still in an early stage of development and can cause issues in production.
 
@@ -151,24 +135,15 @@ Keep in mind that PPM is still in an early stage of development and can cause is
 
 ### Search Filter
 
-When using the `SearchFilter` and case insensivity, Doctrine will use the `LOWER` SQL function. Depending on your
-driver, you may want to carefully index it by using a [function-based
-index](http://use-the-index-luke.com/sql/where-clause/functions/case-insensitive-search) or it will impact performance
-with a huge collection. [Here are some examples to index LIKE
-filters](http://use-the-index-luke.com/sql/where-clause/searching-for-ranges/like-performance-tuning) depending on your
-database driver.
+When using the `SearchFilter` and case insensivity, Doctrine will use the `LOWER` SQL function. Depending on your driver, you may want to carefully index it by using a [function-based index](http://use-the-index-luke.com/sql/where-clause/functions/case-insensitive-search) or it will impact performance with a huge collection. [Here are some examples to index LIKE filters](http://use-the-index-luke.com/sql/where-clause/searching-for-ranges/like-performance-tuning) depending on your database driver.
 
 ### Eager Loading
 
 By default Doctrine comes with [lazy loading](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/reference/working-with-objects.html#by-lazy-loading) - usually a killer time-saving feature but also a performance killer with large applications.
 
-Fortunately, Doctrine offers another approach to solve this problem: [eager loading](https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/working-with-objects.html#by-eager-loading).
-This can easily be enabled for a relation: `@ORM\ManyToOne(fetch="EAGER")`.
+Fortunately, Doctrine offers another approach to solve this problem: [eager loading](https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/working-with-objects.html#by-eager-loading). This can easily be enabled for a relation: `@ORM\ManyToOne(fetch="EAGER")`.
 
-By default in API Platform, we made the choice to force eager loading for all relations, with or without the Doctrine
-`fetch` attribute. Thanks to the eager loading [extension](extensions.md). The `EagerLoadingExtension` will join every
-readable association according to the serialization context. If you want to fetch an association that is not serializable,
-you have to bypass `readable` and `readableLink` by using the `fetchEager` attribute on the property declaration, for example:
+By default in API Platform, we made the choice to force eager loading for all relations, with or without the Doctrine `fetch` attribute. Thanks to the eager loading [extension](extensions.md). The `EagerLoadingExtension` will join every readable association according to the serialization context. If you want to fetch an association that is not serializable, you have to bypass `readable` and `readableLink` by using the `fetchEager` attribute on the property declaration, for example:
 
 ```php
 /**
@@ -179,9 +154,7 @@ you have to bypass `readable` and `readableLink` by using the `fetchEager` attri
 
 #### Max Joins
 
-There is a default restriction with this feature. We allow up to 30 joins per query. Beyond that, an
-`ApiPlatform\Core\Exception\RuntimeException` exception will be thrown but this value can easily be increased with a
-bit of configuration:
+There is a default restriction with this feature. We allow up to 30 joins per query. Beyond that, an `ApiPlatform\Core\Exception\RuntimeException` exception will be thrown but this value can easily be increased with a bit of configuration:
 
 ```yaml
 # api/config/packages/api_platform.yaml
@@ -190,13 +163,11 @@ api_platform:
         max_joins: 100
 ```
 
-Be careful when you exceed this limit, it's often caused by the result of a circular reference. [Serializer groups](serialization.md)
-can be a good solution to fix this issue.
+Be careful when you exceed this limit, it's often caused by the result of a circular reference. [Serializer groups](serialization.md) can be a good solution to fix this issue.
 
 #### Force Eager
 
-As mentioned above, by default we force eager loading for all relations. This behaviour can be modified in the
-configuration in order to apply it only on join relations having the `EAGER` fetch mode:
+As mentioned above, by default we force eager loading for all relations. This behaviour can be modified in the configuration in order to apply it only on join relations having the `EAGER` fetch mode:
 
 ```yaml
 # api/config/packages/api_platform.yaml
@@ -207,8 +178,7 @@ api_platform:
 
 #### Override at Resource and Operation Level
 
-When eager loading is enabled, whatever the status of the `force_eager` parameter, you can easily override it directly
-from the configuration of each resource. You can do this at the resource level, at the operation level, or both:
+When eager loading is enabled, whatever the status of the `force_eager` parameter, you can easily override it directly from the configuration of each resource. You can do this at the resource level, at the operation level, or both:
 
 ```php
 <?php
@@ -299,8 +269,7 @@ class Group
 }
 ```
 
-Be careful, the operation level is higher priority than the resource level but both are higher priority than the global
-configuration.
+Be careful, the operation level is higher priority than the resource level but both are higher priority than the global configuration.
 
 #### Disable Eager Loading
 
@@ -317,9 +286,7 @@ The whole configuration described before will no longer work and Doctrine will r
 
 ### Partial Pagination
 
-When using the default pagination, the Doctrine paginator will execute a `COUNT` query on the collection. The result of the
-`COUNT` query is used to compute the last page available. With big collections this can lead to quite long response times.
-If you don't mind not having the last page available, you can enable partial pagination and avoid the `COUNT` query:
+When using the default pagination, the Doctrine paginator will execute a `COUNT` query on the collection. The result of the `COUNT` query is used to compute the last page available. With big collections this can lead to quite long response times. If you don't mind not having the last page available, you can enable partial pagination and avoid the `COUNT` query:
 
 ```yaml
 # api/config/packages/api_platform.yaml
@@ -337,7 +304,7 @@ Blackfire.io allows you to monitor the performance of your applications. For mor
 
 To configure Blackfire.io follow these simple steps:
 
-1. Add the following to your `docker-compose.yml` file (or an [override file](https://docs.docker.com/compose/reference/overview/#specifying-multiple-compose-files), if only to be used in development)
+1. Add the following to your `docker-compose.yml` file \(or an [override file](https://docs.docker.com/compose/reference/overview/#specifying-multiple-compose-files), if only to be used in development\)
 
 ```yaml
         blackfire:
@@ -348,19 +315,23 @@ To configure Blackfire.io follow these simple steps:
               - BLACKFIRE_SERVER_TOKEN
 ```
 
-2. Add your Blackfire.io id and server token to your `.env` file at the root of your project (be sure not to commit this to a public repository)
+1. Add your Blackfire.io id and server token to your `.env` file at the root of your project \(be sure not to commit this to a public repository\)
 
-        BLACKFIRE_SERVER_ID=xxxxxxxxxx
-        BLACKFIRE_SERVER_TOKEN=xxxxxxxxxx
+   ```text
+    BLACKFIRE_SERVER_ID=xxxxxxxxxx
+    BLACKFIRE_SERVER_TOKEN=xxxxxxxxxx
+   ```
 
-    or set it in the console before running Docker commands
+   or set it in the console before running Docker commands
 
-        $ export BLACKFIRE_SERVER_ID=xxxxxxxxxx
-        $ export BLACKFIRE_SERVER_TOKEN=xxxxxxxxxx
+   ```text
+    $ export BLACKFIRE_SERVER_ID=xxxxxxxxxx
+    $ export BLACKFIRE_SERVER_TOKEN=xxxxxxxxxx
+   ```
 
-3. Install and configure the Blackfire probe in the app container, by adding the following to your `./Dockerfile`
+2. Install and configure the Blackfire probe in the app container, by adding the following to your `./Dockerfile`
 
-```dockerfile
+```text
         RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
             && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/alpine/amd64/$version \
             && mkdir -p /tmp/blackfire \
@@ -369,9 +340,12 @@ To configure Blackfire.io follow these simple steps:
             && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini
 ```
 
-4. Rebuild and restart all your containers
+1. Rebuild and restart all your containers
 
-        $ docker-compose build
-        $ docker-compose up -d
+   ```text
+    $ docker-compose build
+    $ docker-compose up -d
+   ```
 
 For details on how to perform profiling, see [the Blackfire.io documentation](https://blackfire.io/docs/integrations/docker#using-the-client-for-http-profiling).
+

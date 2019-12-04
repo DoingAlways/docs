@@ -1,15 +1,10 @@
 # Validation
 
-API Platform takes care of validating the data sent to the API by the client (usually user data entered through forms).
-By default, the framework relies on [the powerful Symfony Validator Component](http://symfony.com/doc/current/validation.html)
-for this task, but you can replace it by your preferred validation library such as [the PHP filter extension](http://php.net/manual/en/intro.filter.php)
-if you want to.
+API Platform takes care of validating the data sent to the API by the client \(usually user data entered through forms\). By default, the framework relies on [the powerful Symfony Validator Component](http://symfony.com/doc/current/validation.html) for this task, but you can replace it by your preferred validation library such as [the PHP filter extension](http://php.net/manual/en/intro.filter.php) if you want to.
 
 ## Validating Submitted Data
 
-Validating submitted data is as simple as adding [Symfony's built-in constraints](http://symfony.com/doc/current/reference/constraints.html)
-or [custom constraints](http://symfony.com/doc/current/validation/custom_constraint.html) directly in classes marked with
-the `@ApiResource` annotation:
+Validating submitted data is as simple as adding [Symfony's built-in constraints](http://symfony.com/doc/current/reference/constraints.html) or [custom constraints](http://symfony.com/doc/current/validation/custom_constraint.html) directly in classes marked with the `@ApiResource` annotation:
 
 ```php
 <?php
@@ -101,11 +96,9 @@ final class MinimalPropertiesValidator extends ConstraintValidator
 }
 ```
 
-If the data submitted by the client is invalid, the HTTP status code will be set to `400 Bad Request` and the response's
-body will contain the list of violations serialized in a format compliant with the requested one. For instance, a validation
-error will look like the following if the requested format is JSON-LD (the default):
+If the data submitted by the client is invalid, the HTTP status code will be set to `400 Bad Request` and the response's body will contain the list of violations serialized in a format compliant with the requested one. For instance, a validation error will look like the following if the requested format is JSON-LD \(the default\):
 
-```json
+```javascript
 {
   "@context": "/contexts/ConstraintViolationList",
   "@type": "ConstraintViolationList",
@@ -120,13 +113,11 @@ error will look like the following if the requested format is JSON-LD (the defau
 }
 ```
 
-Take a look at the [Errors Handling guide](errors.md) to learn how API Platform converts PHP exceptions like validation
-errors to HTTP errors.
+Take a look at the [Errors Handling guide](errors.md) to learn how API Platform converts PHP exceptions like validation errors to HTTP errors.
 
 ## Using Validation Groups
 
-Without specific configuration, the default validation group is always used, but this behavior is customizable: the framework
-is able to leverage Symfony's [validation groups](http://symfony.com/doc/current/book/validation.html#validation-groups).
+Without specific configuration, the default validation group is always used, but this behavior is customizable: the framework is able to leverage Symfony's [validation groups](http://symfony.com/doc/current/book/validation.html#validation-groups).
 
 You can configure the groups you want to use when the validation occurs directly through the `ApiResource` annotation:
 
@@ -159,13 +150,11 @@ class Book
 
 With the previous configuration, the validation groups `a` and `b` will be used when validation is performed.
 
-Like for [serialization groups](serialization.md#using-different-serialization-groups-per-operation),
-you can specify validation groups globally or on a per-operation basis.
+Like for [serialization groups](serialization.md#using-different-serialization-groups-per-operation), you can specify validation groups globally or on a per-operation basis.
 
 Of course, you can use XML or YAML configuration format instead of annotations if you prefer.
 
-You may also pass in a [group sequence](http://symfony.com/doc/current/validation/sequence_provider.html) in place of
-the array of group names.
+You may also pass in a [group sequence](http://symfony.com/doc/current/validation/sequence_provider.html) in place of the array of group names.
 
 ## Using Validation Groups on Operations
 
@@ -227,15 +216,13 @@ With this configuration, there are three validation groups:
 
 `Default` contains the constraints that belong to no other group.
 
-`postValidation` contains the constraints on the name and author (length from 2 to 50) fields only.
+`postValidation` contains the constraints on the name and author \(length from 2 to 50\) fields only.
 
-`putValidation` contains the constraints on the author (length from 2 to 70) field only.
+`putValidation` contains the constraints on the author \(length from 2 to 70\) field only.
 
 ## Dynamic Validation Groups
 
-If you need to dynamically determine which validation groups to use for an entity in different scenarios, just pass in a
-[callable](http://php.net/manual/en/language.types.callable.php). The callback will receive the entity object as its first
-argument, and should return an array of group names or a [group sequence](http://symfony.com/doc/current/validation/sequence_provider.html).
+If you need to dynamically determine which validation groups to use for an entity in different scenarios, just pass in a [callable](http://php.net/manual/en/language.types.callable.php). The callback will receive the entity object as its first argument, and should return an array of group names or a [group sequence](http://symfony.com/doc/current/validation/sequence_provider.html).
 
 In the following example, we use a static method to return the validation groups:
 
@@ -343,8 +330,7 @@ class Book
 
 ## Error Levels and Payload Serialization
 
-As stated in the [Symfony documentation](https://symfony.com/doc/current/validation/severity.html), you can use the payload field to define error levels.
-You can retrieve the payload field by setting the `serialize_payload_fields` option to `true` in the API Platform config:
+As stated in the [Symfony documentation](https://symfony.com/doc/current/validation/severity.html), you can use the payload field to define error levels. You can retrieve the payload field by setting the `serialize_payload_fields` option to `true` in the API Platform config:
 
 ```yaml
 # api/config/packages/api_platform.yaml
@@ -370,12 +356,11 @@ In this example, only `severity` and `anotherPayloadField` will be serialized.
 
 ## Validation on Collection Relations
 
-Note: this is related to the [collection relation denormalization](./serialization.md#collection-relation).
-You may have an issue when trying to validate a relation representing a collection (`toMany`). After fixing the denormalization by using a getter that returns `$collectionRelation->getValues()`, you should define your validation on the getter instead of the property.
+Note: this is related to the [collection relation denormalization](serialization.md#collection-relation). You may have an issue when trying to validate a relation representing a collection \(`toMany`\). After fixing the denormalization by using a getter that returns `$collectionRelation->getValues()`, you should define your validation on the getter instead of the property.
 
 For example:
 
-```xml
+```markup
 <getter property="cars">
     <constraint name="Valid"/>
 </getter>
@@ -407,20 +392,20 @@ API Platform automatically detects Symfony's built-in validators and generates s
 
 The following validation constraints are covered:
 
-Constraints                                                                           | Vocabulary                        |
---------------------------------------------------------------------------------------|-----------------------------------|
-[`Url`](https://symfony.com/doc/current/reference/constraints/Url.html)               | `http://schema.org/url`           |
-[`Email`](https://symfony.com/doc/current/reference/constraints/Email.html)           | `http://schema.org/email`         |
-[`Uuid`](https://symfony.com/doc/current/reference/constraints/Uuid.html)             | `http://schema.org/identifier`    |
-[`CardScheme`](https://symfony.com/doc/current/reference/constraints/CardScheme.html) | `http://schema.org/identifier`    |
-[`Bic`](https://symfony.com/doc/current/reference/constraints/Bic.html)               | `http://schema.org/identifier`    |
-[`Iban`](https://symfony.com/doc/current/reference/constraints/Iban.html)             | `http://schema.org/identifier`    |
-[`Date`](https://symfony.com/doc/current/reference/constraints/Date.html)             | `http://schema.org/Date`          |
-[`DateTime`](https://symfony.com/doc/current/reference/constraints/DateTime.html)     | `http://schema.org/DateTime`      |
-[`Time`](https://symfony.com/doc/current/reference/constraints/Time.html)             | `http://schema.org/Time`          |
-[`Image`](https://symfony.com/doc/current/reference/constraints/Image.html)           | `http://schema.org/image`         |
-[`File`](https://symfony.com/doc/current/reference/constraints/File.html)             | `http://schema.org/MediaObject`   |
-[`Currency`](https://symfony.com/doc/current/reference/constraints/Currency.html)     | `http://schema.org/priceCurrency` |
-[`Isbn`](https://symfony.com/doc/current/reference/constraints/Isbn.html)             | `http://schema.org/isbn`          |
-[`Issn`](https://symfony.com/doc/current/reference/constraints/Issn.html)             | `http://schema.org/issn`          |
+| Constraints | Vocabulary |
+| :--- | :--- |
+| [`Url`](https://symfony.com/doc/current/reference/constraints/Url.html) | `http://schema.org/url` |
+| [`Email`](https://symfony.com/doc/current/reference/constraints/Email.html) | `http://schema.org/email` |
+| [`Uuid`](https://symfony.com/doc/current/reference/constraints/Uuid.html) | `http://schema.org/identifier` |
+| [`CardScheme`](https://symfony.com/doc/current/reference/constraints/CardScheme.html) | `http://schema.org/identifier` |
+| [`Bic`](https://symfony.com/doc/current/reference/constraints/Bic.html) | `http://schema.org/identifier` |
+| [`Iban`](https://symfony.com/doc/current/reference/constraints/Iban.html) | `http://schema.org/identifier` |
+| [`Date`](https://symfony.com/doc/current/reference/constraints/Date.html) | `http://schema.org/Date` |
+| [`DateTime`](https://symfony.com/doc/current/reference/constraints/DateTime.html) | `http://schema.org/DateTime` |
+| [`Time`](https://symfony.com/doc/current/reference/constraints/Time.html) | `http://schema.org/Time` |
+| [`Image`](https://symfony.com/doc/current/reference/constraints/Image.html) | `http://schema.org/image` |
+| [`File`](https://symfony.com/doc/current/reference/constraints/File.html) | `http://schema.org/MediaObject` |
+| [`Currency`](https://symfony.com/doc/current/reference/constraints/Currency.html) | `http://schema.org/priceCurrency` |
+| [`Isbn`](https://symfony.com/doc/current/reference/constraints/Isbn.html) | `http://schema.org/isbn` |
+| [`Issn`](https://symfony.com/doc/current/reference/constraints/Issn.html) | `http://schema.org/issn` |
 

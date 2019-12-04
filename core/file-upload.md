@@ -1,12 +1,6 @@
 # Handling File Upload
 
-As common a problem as it may seem, handling file upload requires a custom
-implementation in your app. This page will guide you in handling file upload in
-your API, with the help of
-[VichUploaderBundle](https://github.com/dustin10/VichUploaderBundle). It is
-recommended you [read the documentation of
-VichUploaderBundle](https://github.com/dustin10/VichUploaderBundle/blob/master/Resources/doc/index.md)
-before proceeding. It will help you get a grasp on how the bundle works, and why we use it.
+As common a problem as it may seem, handling file upload requires a custom implementation in your app. This page will guide you in handling file upload in your API, with the help of [VichUploaderBundle](https://github.com/dustin10/VichUploaderBundle). It is recommended you [read the documentation of VichUploaderBundle](https://github.com/dustin10/VichUploaderBundle/blob/master/Resources/doc/index.md) before proceeding. It will help you get a grasp on how the bundle works, and why we use it.
 
 ## Installing VichUploaderBundle
 
@@ -16,8 +10,7 @@ Install the bundle with the help of Composer:
 docker-compose exec php composer require vich/uploader-bundle
 ```
 
-This will create a new configuration file that you will need to slightly change
-to make it look like this.
+This will create a new configuration file that you will need to slightly change to make it look like this.
 
 ```yaml
 # api/config/packages/vich_uploader.yaml
@@ -32,9 +25,7 @@ vich_uploader:
 
 ## Configuring the Entity Receiving the Uploaded File
 
-In our example, we will create a `MediaObject` API resource. We will post files
-to this resource endpoint, and then link the newly created resource to another
-resource (in our case: Book).
+In our example, we will create a `MediaObject` API resource. We will post files to this resource endpoint, and then link the newly created resource to another resource \(in our case: Book\).
 
 The `MediaObject` resource is implemented like this:
 
@@ -131,8 +122,7 @@ class MediaObject
 
 ## Handling File Upload
 
-At this point, the entity is configured, but we still need to write the action
-that handles the file upload.
+At this point, the entity is configured, but we still need to write the action that handles the file upload.
 
 ```php
 <?php
@@ -163,8 +153,7 @@ final class CreateMediaObjectAction
 
 ## Resolving the File URL
 
-Returning the plain file path on the filesystem where the file is stored is not useful for the client, which needs a
-URL to work with.
+Returning the plain file path on the filesystem where the file is stored is not useful for the client, which needs a URL to work with.
 
 An [event subscriber](events.md#custom-event-listeners) could be used to set the `contentUrl` property:
 
@@ -231,12 +220,9 @@ final class ResolveMediaObjectContentUrlSubscriber implements EventSubscriberInt
 
 ## Making a Request to the `/media_objects` Endpoint
 
-Your `/media_objects` endpoint is now ready to receive a `POST` request with a
-file. This endpoint accepts standard `multipart/form-data`-encoded data, but
-not JSON data. You will need to format your request accordingly. After posting
-your data, you will get a response looking like this:
+Your `/media_objects` endpoint is now ready to receive a `POST` request with a file. This endpoint accepts standard `multipart/form-data`-encoded data, but not JSON data. You will need to format your request accordingly. After posting your data, you will get a response looking like this:
 
-```json
+```javascript
 {
   "@type": "http://schema.org/MediaObject",
   "@id": "/media_objects/<id>",
@@ -246,8 +232,7 @@ your data, you will get a response looking like this:
 
 ## Linking a MediaObject Resource to Another Resource
 
-We now need to update our `Book` resource, so that we can link a `MediaObject`
-to serve as the book cover.
+We now need to update our `Book` resource, so that we can link a `MediaObject` to serve as the book cover.
 
 We first need to edit our Book resource, and add a new property called `image`.
 
@@ -279,22 +264,21 @@ class Book
      * @ApiProperty(iri="http://schema.org/image")
      */
     public $image;
-    
+
     // ...
 }
 ```
 
-By sending a POST request to create a new book, linked with the previously
-uploaded cover, you can have a nice illustrated book record!
+By sending a POST request to create a new book, linked with the previously uploaded cover, you can have a nice illustrated book record!
 
 `POST /books`
 
-```json
+```javascript
 {
   "name": "The name",
   "image": "/media_objects/<id>"
 }
 ```
 
-Voilà! You can now send files to your API, and link them to any other resource
-in your app.
+Voilà! You can now send files to your API, and link them to any other resource in your app.
+

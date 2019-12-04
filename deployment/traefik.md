@@ -9,22 +9,22 @@ This tool will help you to define your own routes for your client, api and more 
 Use this custom API Platform `docker-compose.yml` file which implements ready-to-use Traefik container configuration.  
 Override ports and add labels to tell Traefik to listen on the routes mentionned and redirect routes to specified container.
 
-
 `--api` Tells Traefik to generate a browser view to watch containers and IP/DNS associated easier  
 `--docker` Tells Traefik to listen on Docker Api  
 `--docker.domain=localhost` The main DNS will be on localhost  
-`labels:` Key for Traefik configuration into Docker integration  
+`labels:` Key for Traefik configuration into Docker integration
+
 ```yaml
 services:
 #  ...
   api:
     labels: 
       - "traefik.frontend.rule=Host:api.localhost"
-``` 
-The API DNS will be specified with `traefik.frontend.rule=Host:your.host` (here api.localhost)  
+```
 
-`--traefik.port=3000` The port specified to Traefik will be exposed by the container (here the React app exposes the 3000 port)  
+The API DNS will be specified with `traefik.frontend.rule=Host:your.host` \(here api.localhost\)
 
+`--traefik.port=3000` The port specified to Traefik will be exposed by the container \(here the React app exposes the 3000 port\)
 
 ```yaml
 version: '3.4'
@@ -105,10 +105,9 @@ volumes:
 
 Don't forget the db-data, or the database won't work in this dockerized solution.
 
-`localhost` is a reserved domain referred to in your `/etc/hosts`. 
-If you want to implement custom DNS such as production DNS in local, just add them at the end of your `/etc/host` file like that: 
+`localhost` is a reserved domain referred to in your `/etc/hosts`. If you want to implement custom DNS such as production DNS in local, just add them at the end of your `/etc/host` file like that:
 
-```
+```text
 # /etc/hosts
 # ...
 
@@ -120,3 +119,4 @@ If you do that, you'll have to update the `CORS_ALLOW_ORIGIN` environment variab
 ## Known Issues
 
 If your network is of type B, it may conflict with the Traefik sub-network.
+

@@ -2,9 +2,7 @@
 
 API Platform Core provides a system to extend queries on items and collections.
 
-Extensions are specific to Doctrine and Elasticsearch-PHP, and therefore, the Doctrine ORM / MongoDB ODM support or the Elasticsearch
-reading support must be enabled to use this feature. If you use custom providers it's up to you to implement your own
-extension system or not.
+Extensions are specific to Doctrine and Elasticsearch-PHP, and therefore, the Doctrine ORM / MongoDB ODM support or the Elasticsearch reading support must be enabled to use this feature. If you use custom providers it's up to you to implement your own extension system or not.
 
 ## Custom Doctrine ORM Extension
 
@@ -101,7 +99,6 @@ final class CurrentUserExtension implements QueryCollectionExtensionInterface, Q
         $queryBuilder->setParameter('current_user', $user);
     }
 }
-
 ```
 
 Finally, if you're not using the autoconfiguration, you have to register the custom extension with either of those tags:
@@ -118,19 +115,18 @@ services:
             - { name: api_platform.doctrine.orm.query_extension.item }
 ```
 
-The `api_platform.doctrine.orm.query_extension.collection` tag will register this service as a collection extension.
-The `api_platform.doctrine.orm.query_extension.item` do the same thing for items.
+The `api_platform.doctrine.orm.query_extension.collection` tag will register this service as a collection extension. The `api_platform.doctrine.orm.query_extension.item` do the same thing for items.
 
 Note that your extensions should have a positive priority if defined. Internal extensions have negative priorities, for reference:
 
-| Service name                                               | Priority | Class                                              |
-|------------------------------------------------------------|------|---------------------------------------------------------|
-| api_platform.doctrine.orm.query_extension.eager_loading (collection) | -8 | ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\EagerLoadingExtension |
-| api_platform.doctrine.orm.query_extension.eager_loading (item) | -8 | ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\EagerLoadingExtension |
-| api_platform.doctrine.orm.query_extension.filter | -16 | ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\FilterExtension |
-| api_platform.doctrine.orm.query_extension.filter_eager_loading | -17 | ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\FilterEagerLoadingExtension |
-| api_platform.doctrine.orm.query_extension.order | -32 | ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\OrderExtension |
-| api_platform.doctrine.orm.query_extension.pagination | -64 | ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\PaginationExtension |
+| Service name | Priority | Class |
+| :--- | :--- | :--- |
+| api\_platform.doctrine.orm.query\_extension.eager\_loading \(collection\) | -8 | ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\EagerLoadingExtension |
+| api\_platform.doctrine.orm.query\_extension.eager\_loading \(item\) | -8 | ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\EagerLoadingExtension |
+| api\_platform.doctrine.orm.query\_extension.filter | -16 | ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\FilterExtension |
+| api\_platform.doctrine.orm.query\_extension.filter\_eager\_loading | -17 | ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\FilterEagerLoadingExtension |
+| api\_platform.doctrine.orm.query\_extension.order | -32 | ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\OrderExtension |
+| api\_platform.doctrine.orm.query\_extension.pagination | -64 | ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\PaginationExtension |
 
 #### Blocking Anonymous Users
 
@@ -153,16 +149,15 @@ security:
 Creating custom extensions is the same as with Doctrine ORM.
 
 The interfaces are:
+
 * `ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Extension\AggregationItemExtensionInterface` and `ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Extension\AggregationCollectionExtensionInterface` to add stages to the [aggregation builder](https://www.doctrine-project.org/projects/doctrine-mongodb-odm/en/latest/reference/aggregation-builder.html).
 * `ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Extension\AggregationResultItemExtensionInterface` and `ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Extension\AggregationResultCollectionExtensionInterface` to return a result.
 
 The tags are `api_platform.doctrine.mongodb.aggregation_extension.item` and `api_platform.doctrine.mongodb.aggregation_extension.collection`.
 
-The custom extensions receive the [aggregation builder](https://www.doctrine-project.org/projects/doctrine-mongodb-odm/en/latest/reference/aggregation-builder.html),
-used to execute [complex operations on data](https://docs.mongodb.com/manual/aggregation/).
+The custom extensions receive the [aggregation builder](https://www.doctrine-project.org/projects/doctrine-mongodb-odm/en/latest/reference/aggregation-builder.html), used to execute [complex operations on data](https://docs.mongodb.com/manual/aggregation/).
 
 ## Custom Elasticsearch Extension
 
-Currently only extensions querying for a collection of items through a [search request](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html)
-are supported. So your custom extensions must implement the `RequestBodySearchCollectionExtensionInterface`. Register your
-custom extensions as services and tag them with the `api_platform.elasticsearch.request_body_search_extension.collection` tag.
+Currently only extensions querying for a collection of items through a [search request](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html) are supported. So your custom extensions must implement the `RequestBodySearchCollectionExtensionInterface`. Register your custom extensions as services and tag them with the `api_platform.elasticsearch.request_body_search_extension.collection` tag.
+

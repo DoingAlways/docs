@@ -4,8 +4,7 @@ The following options can be used in the configuration file.
 
 ## Customizing PHP Namespaces
 
-Namespaces of generated PHP classes can be set globally, respectively for entities, enumerations and interfaces (if used
-with Doctrine Resolve Target Entity Listener option).
+Namespaces of generated PHP classes can be set globally, respectively for entities, enumerations and interfaces \(if used with Doctrine Resolve Target Entity Listener option\).
 
 Example:
 
@@ -30,10 +29,7 @@ types:
 
 ## Forcing a Field Range
 
-Schema.org allows a property to have several types. However, the generator allows only one type by property. If not configured,
-it will use the first defined type.
-The `range` option is useful to set the type of a given property. It can also be used to force a type (even if not in the
-Schema.org definition).
+Schema.org allows a property to have several types. However, the generator allows only one type by property. If not configured, it will use the first defined type. The `range` option is useful to set the type of a given property. It can also be used to force a type \(even if not in the Schema.org definition\).
 
 Example:
 
@@ -50,8 +46,7 @@ types:
 
 ## Forcing a Field Cardinality
 
-The cardinality of a property is automatically guessed. The `cardinality` option allows to override the guessed value.
-Supported cardinalities are:
+The cardinality of a property is automatically guessed. The `cardinality` option allows to override the guessed value. Supported cardinalities are:
 
 * `(0..1)`: scalar, not required
 * `(0..*)`: array, not required
@@ -75,8 +70,7 @@ types:
 
 ## Forcing a Relation Table Name
 
-The relation table name between two entities is automatically guessed by Doctrine. The `relationTableName` option allows
-to override the default value.
+The relation table name between two entities is automatically guessed by Doctrine. The `relationTableName` option allows to override the default value.
 
 This is useful when you need two entities to have more than one relation.
 
@@ -89,7 +83,7 @@ Example:
                 member: { range: Person, cardinality: (1..*) } ## Will be default value : organization_person
 ```
 
-## Forcing (or Disabling) a Class Parent
+## Forcing \(or Disabling\) a Class Parent
 
 Override the guessed class hierarchy of a given type with this option.
 
@@ -105,7 +99,7 @@ Example:
 
 ## Forcing a Class to be Abstract
 
-Force a class to be (or to not be) `abstract`.
+Force a class to be \(or to not be\) `abstract`.
 
 Example:
 
@@ -114,10 +108,9 @@ Example:
         abstract: true
 ```
 
-
 ## Forcing a Nullable Property
 
-Force a property to be (or to not be) `nullable`.
+Force a property to be \(or to not be\) `nullable`.
 
 By default this option is `true`.
 
@@ -146,7 +139,7 @@ The `@Assert\NotNull` constrain is automatically added.
 
 ## Forcing a Unique Property
 
-Force a property to be (or to not be) `unique`.
+Force a property to be \(or to not be\) `unique`.
 
 By default this option is `false`.
 
@@ -159,6 +152,7 @@ Example:
 ```
 
 Output:
+
 ```php
 <?php
 
@@ -258,7 +252,6 @@ class Person
      * @Groups({"public"})
      */
     private $name;
-
 ```
 
 ## Forcing an Embeddable Class to be Embedded
@@ -286,19 +279,16 @@ author: "Kévin Dunglas <kevin@les-tilleuls.coop>"
 
 ## Disabling Generators and Creating Custom Ones
 
-By default, all generators except `DunglasJsonLdApi` (API Platform v1) and `SerializerGroups` are enabled.
-You can specify the list of generators to use with the `annotationGenerators` option.
+By default, all generators except `DunglasJsonLdApi` \(API Platform v1\) and `SerializerGroups` are enabled. You can specify the list of generators to use with the `annotationGenerators` option.
 
-Example (enabling only the PHPDoc generator):
+Example \(enabling only the PHPDoc generator\):
 
 ```yaml
 annotationGenerators:
     - ApiPlatform\SchemaGenerator\AnnotationGenerator\PhpDocAnnotationGenerator
 ```
 
-You can write your generators by implementing the `AnnotationGeneratorInterface`.
-The `AbstractAnnotationGenerator` provides helper methods
-useful when creating your own generators.
+You can write your generators by implementing the `AnnotationGeneratorInterface`. The `AbstractAnnotationGenerator` provides helper methods useful when creating your own generators.
 
 Enabling a custom generator and the PHPDoc generator:
 
@@ -310,8 +300,7 @@ annotationGenerators:
 
 ## Skipping Accessor Method Generation
 
-It's possible to skip the generation of accessor methods. This is particularly useful combined with the `visibility: public`
-option.
+It's possible to skip the generation of accessor methods. This is particularly useful combined with the `visibility: public` option.
 
 To skip the generation of accessor methods, use the following config:
 
@@ -321,9 +310,7 @@ accessorMethods: false
 
 ## Disabling the `id` Generator
 
-By default, the generator adds a property called `id` not provided by Schema.org.
-This is useful when generating an entity for use with an ORM or an ODM but not when generating DTOs.
-This behavior can be disabled with the following setting:
+By default, the generator adds a property called `id` not provided by Schema.org. This is useful when generating an entity for use with an ORM or an ODM but not when generating DTOs. This behavior can be disabled with the following setting:
 
 ```yaml
 id:
@@ -351,8 +338,7 @@ id:
 
 ## Generating Custom IDs
 
-With this configuration option, an `$id` property of type `string` and the corresponding getters and setters will be
-generated, but the DBMS will not generate anything. The ID must be set manually.
+With this configuration option, an `$id` property of type `string` and the corresponding getters and setters will be generated, but the DBMS will not generate anything. The ID must be set manually.
 
 ```yaml
 id:
@@ -361,9 +347,7 @@ id:
 
 ## Disabling Usage of Doctrine Collections
 
-By default, the generator uses classes provided by the [Doctrine Collections](https://github.com/doctrine/collections) library
-to store collections of entities. This is useful (and required) when using Doctrine ORM or Doctrine ODM.
-This behavior can be disabled (to fallback to standard arrays) with the following setting:
+By default, the generator uses classes provided by the [Doctrine Collections](https://github.com/doctrine/collections) library to store collections of entities. This is useful \(and required\) when using Doctrine ORM or Doctrine ODM. This behavior can be disabled \(to fallback to standard arrays\) with the following setting:
 
 ```yaml
 doctrine:
@@ -372,8 +356,7 @@ doctrine:
 
 ## Changing the Field Visibility
 
-Generated fields have a `private` visibility and are exposed through getters and setters.
-The default visibility can be changed with the `fieldVisibility` option.
+Generated fields have a `private` visibility and are exposed through getters and setters. The default visibility can be changed with the `fieldVisibility` option.
 
 Example:
 
@@ -392,8 +375,7 @@ validator:
 
 ## Forcing Doctrine Inheritance Mapping Annotation
 
-The standard behavior of the generator is to use the `@MappedSuperclass` Doctrine annotation for classes with children and
-`@Entity` for classes with no child.
+The standard behavior of the generator is to use the `@MappedSuperclass` Doctrine annotation for classes with children and `@Entity` for classes with no child.
 
 The inheritance annotation can be forced for a given type in the following way:
 
@@ -404,16 +386,13 @@ types:
             inheritanceMapping: "@MappedSuperclass"
 ```
 
-*This setting is only relevant when using the Doctrine ORM generator.*
+_This setting is only relevant when using the Doctrine ORM generator._
 
 ## Interfaces and Doctrine Resolve Target Entity Listener
 
-[`ResolveTargetEntityListener`](https://www.doctrine-project.org/projects/doctrine-orm/en/current/cookbook/resolve-target-entity-listener.html)
-is a feature of Doctrine to keep modules independent. It allows to specify interfaces and `abstract` classes in relation
-mappings.
+[`ResolveTargetEntityListener`](https://www.doctrine-project.org/projects/doctrine-orm/en/current/cookbook/resolve-target-entity-listener.html) is a feature of Doctrine to keep modules independent. It allows to specify interfaces and `abstract` classes in relation mappings.
 
-If you set the option `useInterface` to true, the generator will generate an interface corresponding to each generated
-entity and will use them in relation mappings.
+If you set the option `useInterface` to true, the generator will generate an interface corresponding to each generated entity and will use them in relation mappings.
 
 To let PHP Schema generate the XML mapping file usable with Symfony, add the following to your config file:
 
@@ -424,9 +403,7 @@ doctrine:
 
 ## Custom Schemas
 
-The generator can use your own schema definitions. They must be written in RDFa and follow the format of the [Schema.org's
-definition](https://schema.org/docs/schema_org_rdfa.html). This is useful to document your [Schema.org extensions](https://schema.org/docs/extension.html) and use them
-to generate the PHP data model of your application.
+The generator can use your own schema definitions. They must be written in RDFa and follow the format of the [Schema.org's definition](https://schema.org/docs/schema_org_rdfa.html). This is useful to document your [Schema.org extensions](https://schema.org/docs/extension.html) and use them to generate the PHP data model of your application.
 
 Example:
 
@@ -440,7 +417,7 @@ You can also use any other vocabulary. Check the [Linked Open Vocabularies](http
 
 For instance, to generate a data model from the [Video Game Ontology](http://purl.org/net/VideoGameOntology), use the following config file:
 
-```
+```text
 rdfa:
   - http://vocab.linkeddata.es/vgo/GameOntologyv3.owl # The URL of the vocabulary definition
 
@@ -453,8 +430,7 @@ types:
 
 ## Checking GoodRelation Compatibility
 
-If the `checkIsGoodRelations` option is set to `true`, the generator will emit a warning if an encountered property is not
-par of the [GoodRelations](http://www.heppnetz.de/projects/goodrelations/) schema.
+If the `checkIsGoodRelations` option is set to `true`, the generator will emit a warning if an encountered property is not par of the [GoodRelations](http://www.heppnetz.de/projects/goodrelations/) schema.
 
 This is useful when generating e-commerce data models.
 
@@ -475,7 +451,6 @@ header: |
      * file that was distributed with this source code.
      */
 ```
-
 
 ## Full Configuration Reference
 
@@ -647,3 +622,4 @@ config:
         - ApiPlatform\SchemaGenerator\AnnotationGenerator\ConstraintAnnotationGenerator
         - ApiPlatform\SchemaGenerator\AnnotationGenerator\SerializerGroupsAnnotationGenerator
 ```
+

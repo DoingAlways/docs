@@ -2,17 +2,11 @@
 
 ## Overview
 
-[MongoDB](https://www.mongodb.com/) is one of the most popular NoSQL document-oriented database, used for its high
-write load (useful for analytics or IoT) and high availability (easy to set replica sets with automatic failover). It
-can also shard the database easily for horizontal scalability and has a powerful query language for doing aggregation,
-text search or geospatial queries.
+[MongoDB](https://www.mongodb.com/) is one of the most popular NoSQL document-oriented database, used for its high write load \(useful for analytics or IoT\) and high availability \(easy to set replica sets with automatic failover\). It can also shard the database easily for horizontal scalability and has a powerful query language for doing aggregation, text search or geospatial queries.
 
-API Platform uses [Doctrine MongoDB ODM 2](https://www.doctrine-project.org/projects/mongodb-odm.html) and in particular
-its [aggregation builder](https://www.doctrine-project.org/projects/doctrine-mongodb-odm/en/latest/reference/aggregation-builder.html)
-to leverage all the possibilities of the database.
+API Platform uses [Doctrine MongoDB ODM 2](https://www.doctrine-project.org/projects/mongodb-odm.html) and in particular its [aggregation builder](https://www.doctrine-project.org/projects/doctrine-mongodb-odm/en/latest/reference/aggregation-builder.html) to leverage all the possibilities of the database.
 
-Doctrine MongoDB ODM 2 relies on the [mongodb](https://secure.php.net/manual/en/set.mongodb.php) PHP extension and not on
-the legacy [mongo](https://secure.php.net/manual/en/book.mongo.php) extension.
+Doctrine MongoDB ODM 2 relies on the [mongodb](https://secure.php.net/manual/en/set.mongodb.php) PHP extension and not on the legacy [mongo](https://secure.php.net/manual/en/book.mongo.php) extension.
 
 ## Enabling MongoDB Support
 
@@ -24,16 +18,16 @@ If you are using the [API Platform Distribution](../distribution/index.md), modi
  // api/Dockerfile
 
  ...
- 	pecl install \
- 		apcu-${APCU_VERSION} \
-+		mongodb \
- 	; \
+     pecl install \
+         apcu-${APCU_VERSION} \
++        mongodb \
+     ; \
  ...
- 	docker-php-ext-enable \
- 		apcu \
- 		opcache \
-+		mongodb \
- 	; \
+     docker-php-ext-enable \
+         apcu \
+         opcache \
++        mongodb \
+     ; \
  ...
 ```
 
@@ -66,8 +60,7 @@ Add a MongoDB image to the docker-compose file:
 # ...
 ```
 
-Once the extension is installed, to enable the MongoDB support, require the [Doctrine MongoDB ODM bundle](https://github.com/doctrine/DoctrineMongoDBBundle)
-package using Composer:
+Once the extension is installed, to enable the MongoDB support, require the [Doctrine MongoDB ODM bundle](https://github.com/doctrine/DoctrineMongoDBBundle) package using Composer:
 
 ```bash
 docker-compose exec php composer req doctrine/mongodb-odm-bundle:^4.0.0@beta doctrine/mongodb-odm:^2.0.0@beta
@@ -77,7 +70,7 @@ Execute the contrib recipe to have it already configured.
 
 Change the MongoDB environment variables to match your Docker image:
 
-```
+```text
 # api/.env
 
 MONGODB_URL=mongodb://api-platform:!ChangeMe!@db-mongodb
@@ -205,10 +198,14 @@ class Offer
 ```
 
 Some important information about the mapping:
+
 * Identifier fields always need to be integers with an increment strategy. API Platform does not support the native
-[ObjectId](https://docs.mongodb.com/manual/reference/bson-types/#objectid).
+
+  [ObjectId](https://docs.mongodb.com/manual/reference/bson-types/#objectid).
+
 * When defining references, always use the id for storing them instead of the native [DBRef](https://docs.mongodb.com/manual/reference/database-references/#dbrefs).
-It allows API Platform to manage [filtering on nested properties](filters.md#apifilter-annotation) by using [lookups](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/).
+
+  It allows API Platform to manage [filtering on nested properties](filters.md#apifilter-annotation) by using [lookups](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/).
 
 ## Filtering
 
@@ -219,3 +216,4 @@ See how to use them and how to create custom ones in the [filters documentation]
 ## Creating Custom Extensions
 
 See how to create Doctrine MongoDB ODM custom extensions in the [extensions documentation](extensions.md).
+

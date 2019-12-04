@@ -1,7 +1,6 @@
 # Handling Relations to Collections
 
-Let's consider an API exposing `Person` and `Book` resources linked by a `many-to-many`
-relation (through the `authors` property).
+Let's consider an API exposing `Person` and `Book` resources linked by a `many-to-many` relation \(through the `authors` property\).
 
 This API uses the following PHP code:
 
@@ -73,7 +72,7 @@ The admin handles this `to-many` relation automatically!
 
 ## Customizing a Property
 
-Let's customize the components used for the `authors` property, to display them by their 'name' instead of their 'id' (the default behavior).
+Let's customize the components used for the `authors` property, to display them by their 'name' instead of their 'id' \(the default behavior\).
 
 ```javascript
 import React, { Component } from 'react';
@@ -120,7 +119,6 @@ export default class extends Component {
 }
 ```
 
-
 ## Customizing an Icon
 
 Now that our `authors` property is displaying the name instead of the 'id', let's change the icon shown in the list menu.
@@ -150,7 +148,7 @@ export default class extends Component {
 
         // Set the icon
         authors.icon = UserIcon
-       
+
         this.setState({ api });
       }
     )
@@ -214,3 +212,4 @@ Then edit the configuration of API Platform Admin to pass a `filterToQuery` prop
 ```
 
 The autocomplete field should now work properly!
+

@@ -1,8 +1,6 @@
 # Authentication Support
 
-Authentication can easily be handled when using the API Platform's admin library.
-In the following section, we will assume [the API is secured using JWT](../core/jwt.md), but the
-process is similar for other authentication mechanisms. The `authenticationTokenUri` is the full URI to the path / route specified by the `firewalls.{name}.json_login.check_path` config in the [JWT documentation](../core/jwt.md).
+Authentication can easily be handled when using the API Platform's admin library. In the following section, we will assume [the API is secured using JWT](../core/jwt.md), but the process is similar for other authentication mechanisms. The `authenticationTokenUri` is the full URI to the path / route specified by the `firewalls.{name}.json_login.check_path` config in the [JWT documentation](../core/jwt.md).
 
 The first step is to create a client to handle the authentication process:
 
@@ -103,5 +101,5 @@ export default () => (
 );
 ```
 
-Refer to [the chapter dedicated to authentication in the React Admin documentation](https://marmelab.com/react-admin/Authentication.html)
-for more information.
+Refer to [the chapter dedicated to authentication in the React Admin documentation](https://marmelab.com/react-admin/Authentication.html) for more information.
+

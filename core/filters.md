@@ -1,21 +1,16 @@
 # Filters
 
-API Platform Core provides a generic system to apply filters on collections. Useful filters for the Doctrine ORM and
-MongoDB ODM are provided with the library. You can also create custom filters that fit your specific needs.
-You can also add filtering support to your custom [data providers](data-providers.md) by implementing interfaces provided
-by the library.
+API Platform Core provides a generic system to apply filters on collections. Useful filters for the Doctrine ORM and MongoDB ODM are provided with the library. You can also create custom filters that fit your specific needs. You can also add filtering support to your custom [data providers](data-providers.md) by implementing interfaces provided by the library.
 
 By default, all filters are disabled. They must be enabled explicitly.
 
-When a filter is enabled, it is automatically documented as a `hydra:search` property in the collection response. It also
-automatically appears in the [NelmioApiDoc documentation](nelmio-api-doc.md) if it is available.
+When a filter is enabled, it is automatically documented as a `hydra:search` property in the collection response. It also automatically appears in the [NelmioApiDoc documentation](nelmio-api-doc.md) if it is available.
 
 ## Doctrine ORM and MongoDB ODM Filters
 
 ### Basic Knowledge
 
-Filters are services (see the section on [custom filters](#creating-custom-filters)), and they can be linked
-to a Resource in two ways:
+Filters are services \(see the section on [custom filters](filters.md#creating-custom-filters)\), and they can be linked to a Resource in two ways:
 
 1. Through the `ApiResource` declaration, as the `filters` attribute.
 
@@ -68,7 +63,7 @@ App\Entity\Offer:
 
 Or XML:
 
-```xml
+```markup
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- api/config/api_platform/resources.xml -->
 
@@ -89,7 +84,7 @@ Or XML:
 </resources>
 ```
 
-2. By using the `@ApiFilter` annotation.
+1. By using the `@ApiFilter` annotation.
 
 This annotation automatically declares the service, and you just have to use the filter class you want:
 
@@ -117,13 +112,11 @@ Learn more on how the [ApiFilter annotation](filters.md#apifilter-annotation) wo
 
 For the sake of consistency, we're using the annotation in the below documentation.
 
-For MongoDB ODM, all the filters are in the namespace `ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Filter`. The filter
-services all begin with `api_platform.doctrine_mongodb.odm`.
+For MongoDB ODM, all the filters are in the namespace `ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Filter`. The filter services all begin with `api_platform.doctrine_mongodb.odm`.
 
 ### Search Filter
 
-If Doctrine ORM or MongoDB ODM support is enabled, adding filters is as easy as registering a filter service in the
-`api/config/services.yaml` file and adding an attribute to your resource configuration.
+If Doctrine ORM or MongoDB ODM support is enabled, adding filters is as easy as registering a filter service in the `api/config/services.yaml` file and adding an attribute to your resource configuration.
 
 The search filter supports `exact`, `partial`, `start`, `end`, and `word_start` matching strategies:
 
@@ -132,14 +125,11 @@ The search filter supports `exact`, `partial`, `start`, `end`, and `word_start` 
 * `end` strategy uses `LIKE %text` to search for fields that end with `text`.
 * `word_start` strategy uses `LIKE text% OR LIKE % text%` to search for fields that contain words starting with `text`.
 
-Prepend the letter `i` to the filter if you want it to be case insensitive. For example `ipartial` or `iexact`. Note that
-this will use the `LOWER` function and **will** impact performance [if there is no proper index](performance.md#search-filter).
+Prepend the letter `i` to the filter if you want it to be case insensitive. For example `ipartial` or `iexact`. Note that this will use the `LOWER` function and **will** impact performance [if there is no proper index](performance.md#search-filter).
 
-Case insensitivity may already be enforced at the database level depending on the [collation](https://en.wikipedia.org/wiki/Collation)
-used. If you are using MySQL, note that the commonly used `utf8_unicode_ci` collation (and its sibling `utf8mb4_unicode_ci`)
-are already case-insensitive, as indicated by the `_ci` part in their names.
+Case insensitivity may already be enforced at the database level depending on the [collation](https://en.wikipedia.org/wiki/Collation) used. If you are using MySQL, note that the commonly used `utf8_unicode_ci` collation \(and its sibling `utf8mb4_unicode_ci`\) are already case-insensitive, as indicated by the `_ci` part in their names.
 
-Note: Search filters with the `exact` strategy can have multiple values for the same property (in this case the condition will be similar to a SQL IN clause).
+Note: Search filters with the `exact` strategy can have multiple values for the same property \(in this case the condition will be similar to a SQL IN clause\).
 
 Syntax: `?property[]=foo&property[]=bar`
 
@@ -165,8 +155,7 @@ class Offer
 }
 ```
 
-`http://localhost:8000/api/offers?price=10` will return all offers with a price being exactly `10`.
-`http://localhost:8000/api/offers?description=shirt` will return all offers with a description containing the word "shirt".
+`http://localhost:8000/api/offers?price=10` will return all offers with a price being exactly `10`. `http://localhost:8000/api/offers?description=shirt` will return all offers with a description containing the word "shirt".
 
 Filters can be combined together: `http://localhost:8000/api/offers?price=10&description=shirt`
 
@@ -192,11 +181,9 @@ class Offer
 }
 ```
 
-With this service definition, it is possible to find all offers belonging to the product identified by a given IRI.
-Try the following: `http://localhost:8000/api/offers?product=/api/products/12`.
-Using a numeric ID is also supported: `http://localhost:8000/api/offers?product=12`
+With this service definition, it is possible to find all offers belonging to the product identified by a given IRI. Try the following: `http://localhost:8000/api/offers?product=/api/products/12`. Using a numeric ID is also supported: `http://localhost:8000/api/offers?product=12`
 
-The above URLs will return all offers for the product having the following IRI as JSON-LD identifier (`@id`): `http://localhost:8000/api/products/12`.
+The above URLs will return all offers for the product having the following IRI as JSON-LD identifier \(`@id`\): `http://localhost:8000/api/products/12`.
 
 ### Date Filter
 
@@ -236,16 +223,15 @@ It will return all offers where `createdAt` is superior or equal to `2018-03-19`
 
 #### Managing `null` Values
 
-The date filter is able to deal with date properties having `null` values.
-Four behaviors are available at the property level of the filter:
+The date filter is able to deal with date properties having `null` values. Four behaviors are available at the property level of the filter:
 
-Description                          | Strategy to set
--------------------------------------|------------------------------------------------------------------------------------
-Use the default behavior of the DBMS | `null`
-Exclude items                        | `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter::EXCLUDE_NULL` (`exclude_null`)
-Consider items as oldest             | `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter::INCLUDE_NULL_BEFORE` (`include_null_before`)
-Consider items as youngest           | `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter::INCLUDE_NULL_AFTER` (`include_null_after`)
-Always include items                 | `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter::INCLUDE_NULL_BEFORE_AND_AFTER` (`include_null_before_and_after`)
+| Description | Strategy to set |
+| :--- | :--- |
+| Use the default behavior of the DBMS | `null` |
+| Exclude items | `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter::EXCLUDE_NULL` \(`exclude_null`\) |
+| Consider items as oldest | `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter::INCLUDE_NULL_BEFORE` \(`include_null_before`\) |
+| Consider items as youngest | `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter::INCLUDE_NULL_AFTER` \(`include_null_after`\) |
+| Always include items | `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter::INCLUDE_NULL_BEFORE_AND_AFTER` \(`include_null_before_and_after`\) |
 
 For instance, exclude entries with a property value of `null` with the following service definition:
 
@@ -373,7 +359,7 @@ The exists filter allows you to select items based on a nullable field value.
 
 Syntax: `?exists[property]=<true|false|1|0>`
 
-Previous syntax (deprecated): `?property[exists]=<true|false|1|0>`
+Previous syntax \(deprecated\): `?property[exists]=<true|false|1|0>`
 
 Enable the filter:
 
@@ -403,8 +389,7 @@ It will return all offers where `transportFees` is not `null`.
 
 #### Using a Custom Exists Query Parameter Name
 
-A conflict will occur if `exists` is also the name of a property with the search filter enabled.
-Luckily, the query parameter name to use is configurable:
+A conflict will occur if `exists` is also the name of a property with the search filter enabled. Luckily, the query parameter name to use is configurable:
 
 ```yaml
 # api/config/packages/api_platform.yaml
@@ -413,7 +398,7 @@ api_platform:
         exists_parameter_name: 'not_null' # the URL query parameter to use is now "not_null"
 ```
 
-### Order Filter (Sorting)
+### Order Filter \(Sorting\)
 
 The order filter allows to sort a collection against the given properties.
 
@@ -441,11 +426,9 @@ class Offer
 }
 ```
 
-Given that the collection endpoint is `/offers`, you can filter offers by name in ascending order and then by ID in descending
-order with the following query: `/offers?order[name]=desc&order[id]=asc`.
+Given that the collection endpoint is `/offers`, you can filter offers by name in ascending order and then by ID in descending order with the following query: `/offers?order[name]=desc&order[id]=asc`.
 
-By default, whenever the query does not specify the direction explicitly (e.g.: `/offers?order[name]&order[id]`), filters
-will not be applied unless you configure a default order direction to use:
+By default, whenever the query does not specify the direction explicitly \(e.g.: `/offers?order[name]&order[id]`\), filters will not be applied unless you configure a default order direction to use:
 
 ```php
 <?php
@@ -469,17 +452,15 @@ class Offer
 
 #### Comparing with Null Values
 
-When the property used for ordering can contain `null` values, you may want to specify how `null` values are treated in
-the comparison:
+When the property used for ordering can contain `null` values, you may want to specify how `null` values are treated in the comparison:
 
-Description                          | Strategy to set
--------------------------------------|---------------------------------------------------------------------------------------------
-Use the default behavior of the DBMS | `null`
-Consider items as smallest           | `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter::NULLS_SMALLEST` (`nulls_smallest`)
-Consider items as largest            | `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter::NULLS_LARGEST` (`nulls_largest`)
+| Description | Strategy to set |
+| :--- | :--- |
+| Use the default behavior of the DBMS | `null` |
+| Consider items as smallest | `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter::NULLS_SMALLEST` \(`nulls_smallest`\) |
+| Consider items as largest | `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter::NULLS_LARGEST` \(`nulls_largest`\) |
 
 For instance, treat entries with a property value of `null` as the smallest, with the following service definition:
-
 
 ```php
 <?php
@@ -503,8 +484,7 @@ class Offer
 
 #### Using a Custom Order Query Parameter Name
 
-A conflict will occur if `order` is also the name of a property with the search filter enabled.
-Luckily, the query parameter name to use is configurable:
+A conflict will occur if `order` is also the name of a property with the search filter enabled. Luckily, the query parameter name to use is configurable:
 
 ```yaml
 # api/config/packages/api_platform.yaml
@@ -515,8 +495,7 @@ api_platform:
 
 ### Filtering on Nested Properties
 
-Sometimes, you need to be able to perform filtering based on some linked resources (on the other side of a relation). All
-built-in filters support nested properties using the dot (`.`) syntax, e.g.:
+Sometimes, you need to be able to perform filtering based on some linked resources \(on the other side of a relation\). All built-in filters support nested properties using the dot \(`.`\) syntax, e.g.:
 
 ```php
 <?php
@@ -540,14 +519,11 @@ class Offer
 }
 ```
 
-The above allows you to find offers by their respective product's color: `http://localhost:8000/api/offers?product.color=red`,
-or order offers by the product's release date: `http://localhost:8000/api/offers?order[product.releaseDate]=desc`
+The above allows you to find offers by their respective product's color: `http://localhost:8000/api/offers?product.color=red`, or order offers by the product's release date: `http://localhost:8000/api/offers?order[product.releaseDate]=desc`
 
 ### Enabling a Filter for All Properties of a Resource
 
-As we have seen in previous examples, properties where filters can be applied must be explicitly declared. If you don't
-care about security and performance (e.g. an API with restricted access), it is also possible to enable built-in filters
-for all properties:
+As we have seen in previous examples, properties where filters can be applied must be explicitly declared. If you don't care about security and performance \(e.g. an API with restricted access\), it is also possible to enable built-in filters for all properties:
 
 ```php
 <?php
@@ -574,7 +550,7 @@ class Offer
 Regardless of this option, filters can be applied on a property only if:
 
 * the property exists
-* the value is supported (ex: `asc` or `desc` for the order filters).
+* the value is supported \(ex: `asc` or `desc` for the order filters\).
 
 It means that the filter will be **silently** ignored if the property:
 
@@ -584,10 +560,9 @@ It means that the filter will be **silently** ignored if the property:
 
 ## Elasticsearch Filters
 
-### Ordering Filter (Sorting)
+### Ordering Filter \(Sorting\)
 
-The order filter allows to [sort](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-sort.html)
-a collection against the given properties.
+The order filter allows to [sort](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-sort.html) a collection against the given properties.
 
 Syntax: `?order[property]=<asc|desc>`
 
@@ -613,11 +588,9 @@ class Tweet
 }
 ```
 
-Given that the collection endpoint is `/tweets`, you can filter tweets by id and date in ascending or descending order:
-`/tweets?order[id]=asc&order[date]=desc`.
+Given that the collection endpoint is `/tweets`, you can filter tweets by id and date in ascending or descending order: `/tweets?order[id]=asc&order[date]=desc`.
 
-By default, whenever the query does not specify the direction explicitly (e.g: `/tweets?order[id]&order[date]`), filters
-will not be applied unless you configure a default order direction to use:
+By default, whenever the query does not specify the direction explicitly \(e.g: `/tweets?order[id]&order[date]`\), filters will not be applied unless you configure a default order direction to use:
 
 ```php
 <?php
@@ -641,8 +614,7 @@ class Tweet
 
 #### Using a Custom Order Query Parameter Name
 
-A conflict will occur if `order` is also the name of a property with the term filter enabled. Luckily, the query
-parameter name to use is configurable:
+A conflict will occur if `order` is also the name of a property with the term filter enabled. Luckily, the query parameter name to use is configurable:
 
 ```yaml
 # api/config/packages/api_platform.yaml
@@ -653,8 +625,7 @@ api_platform:
 
 ### Match Filter
 
-The match filter allows to find resources that [match](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html)
-the specified text on full text fields.
+The match filter allows to find resources that [match](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html) the specified text on full text fields.
 
 Syntax: `?property[]=value`
 
@@ -686,8 +657,7 @@ Given that the collection endpoint is `/tweets`, you can filter tweets by messag
 
 ### Term Filter
 
-The term filter allows to find resources that contain the exact specified
-[terms](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-term-query.html).
+The term filter allows to find resources that contain the exact specified [terms](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-term-query.html).
 
 Syntax: `?property[]=value`
 
@@ -715,15 +685,13 @@ class User
 
 Given that the collection endpoint is `/users`, you can filter users by gender and age.
 
-`/users?gender=female` will return all users whose gender is `female`.
-`/users?age=42` will return all users whose age is `42`.
+`/users?gender=female` will return all users whose gender is `female`. `/users?age=42` will return all users whose age is `42`.
 
 Filters can be combined together: `/users?gender=female&age=42`.
 
 ### Filtering on Nested Properties
 
-Sometimes, you need to be able to perform filtering based on some linked resources (on the other side of a relation).
-All built-in filters support nested properties using the (`.`) syntax.
+Sometimes, you need to be able to perform filtering based on some linked resources \(on the other side of a relation\). All built-in filters support nested properties using the \(`.`\) syntax.
 
 ```php
 <?php
@@ -747,8 +715,7 @@ class Tweet
 }
 ```
 
-The above allows you to find tweets by their respective author's gender `/tweets?author.gender=male`, or order tweets by the
-author's first name `/tweets?order[author.firstName]=desc`.
+The above allows you to find tweets by their respective author's gender `/tweets?author.gender=male`, or order tweets by the author's first name `/tweets?order[author.firstName]=desc`.
 
 ## Serializer Filters
 
@@ -783,15 +750,16 @@ class Book
 ```
 
 Three arguments are available to configure the filter:
-- `parameterName` is the query parameter name (default `groups`)
-- `overrideDefaultGroups` allows to override the default serialization groups (default `false`)
-- `whitelist` groups whitelist to avoid uncontrolled data exposure (default `null` to allow all groups)
+
+* `parameterName` is the query parameter name \(default `groups`\)
+* `overrideDefaultGroups` allows to override the default serialization groups \(default `false`\)
+* `whitelist` groups whitelist to avoid uncontrolled data exposure \(default `null` to allow all groups\)
 
 Given that the collection endpoint is `/books`, you can filter by serialization groups with the following query: `/books?groups[]=read&groups[]=write`.
 
 ### Property filter
 
-The property filter adds the possibility to select the properties to serialize (sparse fieldsets).
+The property filter adds the possibility to select the properties to serialize \(sparse fieldsets\).
 
 Syntax: `?properties[]=<property>&properties[<relation>][]=<property>`
 
@@ -820,33 +788,26 @@ class Book
 ```
 
 Three arguments are available to configure the filter:
-- `parameterName` is the query parameter name (default `properties`)
-- `overrideDefaultProperties` allows to override the default serialization properties (default `false`)
-- `whitelist` properties whitelist to avoid uncontrolled data exposure (default `null` to allow all properties)
 
-Given that the collection endpoint is `/books`, you can filter the serialization properties with the following query: `/books?properties[]=title&properties[]=author`.
-If you want to include some properties of the nested "author" document, use: `/books?properties[]=title&properties[author][]=name`.
+* `parameterName` is the query parameter name \(default `properties`\)
+* `overrideDefaultProperties` allows to override the default serialization properties \(default `false`\)
+* `whitelist` properties whitelist to avoid uncontrolled data exposure \(default `null` to allow all properties\)
+
+Given that the collection endpoint is `/books`, you can filter the serialization properties with the following query: `/books?properties[]=title&properties[]=author`. If you want to include some properties of the nested "author" document, use: `/books?properties[]=title&properties[author][]=name`.
 
 ## Creating Custom Filters
 
 Custom filters can be written by implementing the `ApiPlatform\Core\Api\FilterInterface` interface.
 
-API Platform provides a convenient way to create Doctrine ORM and MongoDB ODM filters. If you use [custom data providers](data-providers.md),
-you can still create filters by implementing the previously mentioned interface, but - as API Platform isn't aware of your
-persistence system's internals - you have to create the filtering logic by yourself.
+API Platform provides a convenient way to create Doctrine ORM and MongoDB ODM filters. If you use [custom data providers](data-providers.md), you can still create filters by implementing the previously mentioned interface, but - as API Platform isn't aware of your persistence system's internals - you have to create the filtering logic by yourself.
 
 ### Creating Custom Doctrine ORM Filters
 
-Doctrine ORM filters have access to the context created from the HTTP request and to the `QueryBuilder` instance used to
-retrieve data from the database. They are only applied to collections. If you want to deal with the DQL query generated
-to retrieve items, [extensions](extensions.md) are the way to go.
+Doctrine ORM filters have access to the context created from the HTTP request and to the `QueryBuilder` instance used to retrieve data from the database. They are only applied to collections. If you want to deal with the DQL query generated to retrieve items, [extensions](extensions.md) are the way to go.
 
-A Doctrine ORM filter is basically a class implementing the `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\FilterInterface`.
-API Platform includes a convenient abstract class implementing this interface and providing utility methods: `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\AbstractFilter`.
+A Doctrine ORM filter is basically a class implementing the `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\FilterInterface`. API Platform includes a convenient abstract class implementing this interface and providing utility methods: `ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\AbstractFilter`.
 
-In the following example, we create a class to filter a collection by applying a regexp to a property. The `REGEXP` DQL
-function used in this example can be found in the [`DoctrineExtensions`](https://github.com/beberlei/DoctrineExtensions)
-library. This library must be properly installed and registered to use this example (works only with MySQL).
+In the following example, we create a class to filter a collection by applying a regexp to a property. The `REGEXP` DQL function used in this example can be found in the [`DoctrineExtensions`](https://github.com/beberlei/DoctrineExtensions) library. This library must be properly installed and registered to use this example \(works only with MySQL\).
 
 ```php
 <?php
@@ -913,8 +874,7 @@ services:
         #tags: [ 'api_platform.filter' ]
 ```
 
-In the previous example, the filter can be applied on any property. However, thanks to the `AbstractFilter` class,
-it can also be enabled for some properties:
+In the previous example, the filter can be applied on any property. However, thanks to the `AbstractFilter` class, it can also be enabled for some properties:
 
 ```yaml
 # api/config/services.yaml
@@ -966,32 +926,24 @@ class Offer
     // ...
 }
 ```
-When using `ApiFilter` annotation, the declared properties in the `services.yaml` will not be taken into account. You have to use the `ApiFilter` way (see the [documentation](#apifilter-annotation)).
 
-Finally you can use this filter in the URL like `http://example.com/offers?regexp_email=^[FOO]`. This new filter will also
-appear in Swagger and Hydra documentations.
+When using `ApiFilter` annotation, the declared properties in the `services.yaml` will not be taken into account. You have to use the `ApiFilter` way \(see the [documentation](filters.md#apifilter-annotation)\).
+
+Finally you can use this filter in the URL like `http://example.com/offers?regexp_email=^[FOO]`. This new filter will also appear in Swagger and Hydra documentations.
 
 ### Creating Custom Doctrine MongoDB ODM Filters
 
-Doctrine MongoDB ODM filters have access to the context created from the HTTP request and to the [aggregation builder](https://www.doctrine-project.org/projects/doctrine-mongodb-odm/en/latest/reference/aggregation-builder.html)
-instance used to retrieve data from the database and to execute [complex operations on data](https://docs.mongodb.com/manual/aggregation/).
-They are only applied to collections. If you want to deal with the aggregation pipeline generated to retrieve items, [extensions](extensions.md) are the way to go.
+Doctrine MongoDB ODM filters have access to the context created from the HTTP request and to the [aggregation builder](https://www.doctrine-project.org/projects/doctrine-mongodb-odm/en/latest/reference/aggregation-builder.html) instance used to retrieve data from the database and to execute [complex operations on data](https://docs.mongodb.com/manual/aggregation/). They are only applied to collections. If you want to deal with the aggregation pipeline generated to retrieve items, [extensions](extensions.md) are the way to go.
 
-A Doctrine MongoDB ODM filter is basically a class implementing the `ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Filter\FilterInterface`.
-API Platform includes a convenient abstract class implementing this interface and providing utility methods: `ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Filter\AbstractFilter`.
+A Doctrine MongoDB ODM filter is basically a class implementing the `ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Filter\FilterInterface`. API Platform includes a convenient abstract class implementing this interface and providing utility methods: `ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Filter\AbstractFilter`.
 
 ### Creating Custom Elasticsearch Filters
 
-Elasticsearch filters have access to the context created from the HTTP request and to the Elasticsearch query clause.
-They are only applied to collections. If you want to deal with the query DSL through the search request body, extensions
-are the way to go.
+Elasticsearch filters have access to the context created from the HTTP request and to the Elasticsearch query clause. They are only applied to collections. If you want to deal with the query DSL through the search request body, extensions are the way to go.
 
-Existing Elasticsearch filters are applied through a [constant score query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-constant-score-query.html).
-A constant score query filter is basically a class implementing the `ApiPlatform\Core\Bridge\Elasticsearch\DataProvider\Filter\ConstantScoreFilterInterface`
-and the `ApiPlatform\Core\Bridge\Elasticsearch\DataProvider\Filter\FilterInterface`. API Platform includes a convenient
-abstract class implementing this last interface and providing utility methods: `ApiPlatform\Core\Bridge\Elasticsearch\DataProvider\Filter\AbstractFilter`.
+Existing Elasticsearch filters are applied through a [constant score query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-constant-score-query.html). A constant score query filter is basically a class implementing the `ApiPlatform\Core\Bridge\Elasticsearch\DataProvider\Filter\ConstantScoreFilterInterface` and the `ApiPlatform\Core\Bridge\Elasticsearch\DataProvider\Filter\FilterInterface`. API Platform includes a convenient abstract class implementing this last interface and providing utility methods: `ApiPlatform\Core\Bridge\Elasticsearch\DataProvider\Filter\AbstractFilter`.
 
-Suppose you want to use the [match filter](#match-filter) on a property named `$fullName` and you want to add the [and operator](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html#query-dsl-match-query-boolean) to your query:
+Suppose you want to use the [match filter](filters.md#match-filter) on a property named `$fullName` and you want to add the [and operator](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html#query-dsl-match-query-boolean) to your query:
 
 ```php
 <?php
@@ -1010,9 +962,9 @@ class AndOperatorFilterExtension implements RequestBodySearchCollectionExtension
             'query' => $context['filters']['fullName'],
             'operator' => 'and',
         ];
-        
+
         $requestBody['query']['constant_score']['filter']['bool']['must'][0]['match']['full_name'] = $andQuery;
-        
+
         return $requestBody;
     }
 }
@@ -1020,8 +972,7 @@ class AndOperatorFilterExtension implements RequestBodySearchCollectionExtension
 
 ### Using Doctrine ORM Filters
 
-Doctrine ORM features [a filter system](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/filters.html) that allows the developer to add SQL to the conditional clauses of queries, regardless of the place where the SQL is generated (e.g. from a DQL query, or by loading associated entities).
-These are applied on collections and items and therefore are incredibly useful.
+Doctrine ORM features [a filter system](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/filters.html) that allows the developer to add SQL to the conditional clauses of queries, regardless of the place where the SQL is generated \(e.g. from a DQL query, or by loading associated entities\). These are applied on collections and items and therefore are incredibly useful.
 
 The following information, specific to Doctrine filters in Symfony, is based upon [a great article posted on Michaël Perrin's blog](http://blog.michaelperrin.fr/2014/12/05/doctrine-filters/).
 
@@ -1065,7 +1016,7 @@ class Order
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      **/
     public $user;
-    
+
     // ...
 }
 ```
@@ -1187,7 +1138,7 @@ services:
         autoconfigure: false
 ```
 
-It's key to set the priority higher than the `ApiPlatform\Core\EventListener\ReadListener`'s priority, as flagged in [this issue](https://github.com/api-platform/core/issues/1185), as otherwise the `PaginatorExtension` will ignore the Doctrine filter and return incorrect `totalItems` and `page` (first/last/next) data.
+It's key to set the priority higher than the `ApiPlatform\Core\EventListener\ReadListener`'s priority, as flagged in [this issue](https://github.com/api-platform/core/issues/1185), as otherwise the `PaginatorExtension` will ignore the Doctrine filter and return incorrect `totalItems` and `page` \(first/last/next\) data.
 
 Lastly, implement the configurator class:
 
@@ -1280,25 +1231,23 @@ class DummyCar
 
     // ...
 }
-
 ```
 
 On the first property, `name`, it's straightforward. The first annotation argument is the filter class, the second specifies options, here, the strategy:
 
-```
+```text
 @ApiFilter(SearchFilter::class, strategy="partial")
 ```
 
-In the second annotation, we specify `properties` on which the filter should apply. It's necessary here because we don't want to filter `colors` but the `prop` property of the `colors` association.
-Note that for each given property we specify the strategy:
+In the second annotation, we specify `properties` on which the filter should apply. It's necessary here because we don't want to filter `colors` but the `prop` property of the `colors` association. Note that for each given property we specify the strategy:
 
-```
+```text
 @ApiFilter(SearchFilter::class, properties={"colors.prop": "ipartial"})
 ```
 
 The `ApiFilter` annotation can be set on the class as well. If you don't specify any properties, it'll act on every property of the class.
 
-For example, let's define three data filters (`DateFilter`, `SearchFilter` and `BooleanFilter`) and two serialization filters (`PropertyFilter` and `GroupFilter`) on our `DummyCar` class:
+For example, let's define three data filters \(`DateFilter`, `SearchFilter` and `BooleanFilter`\) and two serialization filters \(`PropertyFilter` and `GroupFilter`\) on our `DummyCar` class:
 
 ```php
 <?php
@@ -1328,32 +1277,32 @@ class DummyCar
 {
     // ...
 }
-
 ```
 
 The `BooleanFilter` is applied to every `Boolean` property of the class. Indeed, in each core filter we check the Doctrine type. It's written only by using the filter class:
 
-```
+```text
 @ApiFilter(BooleanFilter::class)
 ```
 
 The `DateFilter` given here will be applied to every `Date` property of the `DummyCar` class with the `DateFilter::EXCLUDE_NULL` strategy:
 
-```
+```text
 @ApiFilter(DateFilter::class, strategy=DateFilter::EXCLUDE_NULL)
 ```
 
 The `SearchFilter` here adds properties. The result is the exact same as the example with annotations on properties:
 
-```
+```text
 @ApiFilter(SearchFilter::class, properties={"colors.prop": "ipartial", "name": "partial"})
 ```
 
 Note that you can specify the `properties` argument on every filter.
 
-The next filters are not related to how the data is fetched but rather to how the serialization is done on those. We can give an `arguments` option ([see here for the available arguments](#serializer-filters)):
+The next filters are not related to how the data is fetched but rather to how the serialization is done on those. We can give an `arguments` option \([see here for the available arguments](filters.md#serializer-filters)\):
 
-```
+```text
 @ApiFilter(PropertyFilter::class, arguments={"parameterName": "foobar"})
 @ApiFilter(GroupFilter::class, arguments={"parameterName": "foobargroups"})
 ```
+

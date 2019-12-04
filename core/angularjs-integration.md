@@ -1,12 +1,10 @@
 # AngularJS Integration
 
-Warning: for a new project, you should consider using [the API Platform's Progressive Web App generator](../client-generator/index.md)
-(that supports React and Vue.js) instead of this Angular v1 integration.
+Warning: for a new project, you should consider using [the API Platform's Progressive Web App generator](../client-generator/index.md) \(that supports React and Vue.js\) instead of this Angular v1 integration.
 
 ## Restangular
 
-API Platform works fine with [AngularJS v1](http://angularjs.org). The popular [Restangular](https://github.com/mgonto/restangular)
-REST client library for Angular can easily be configured to handle the API format.
+API Platform works fine with [AngularJS v1](http://angularjs.org). The popular [Restangular](https://github.com/mgonto/restangular) REST client library for Angular can easily be configured to handle the API format.
 
 Here is a working Restangular config:
 
@@ -64,8 +62,7 @@ var app = angular
 
 ## ng-admin
 
-If you want to use [ng-admin](https://github.com/marmelab/ng-admin), set the [Restangular](#restangular) config,
-then create your entities like in the following example :
+If you want to use [ng-admin](https://github.com/marmelab/ng-admin), set the [Restangular](angularjs-integration.md#restangular) config, then create your entities like in the following example :
 
 ```javascript
 'use strict';
@@ -98,3 +95,4 @@ nga.configure(admin);
 ```
 
 You can look at what we have done on [api-platform/admin](https://github.com/api-platform/admin).
+

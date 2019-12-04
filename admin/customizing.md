@@ -57,9 +57,7 @@ const myApiDocumentationParser = entrypoint => parseHydraDocumentation(entrypoin
 export default () => <HydraAdmin apiDocumentationParser={myApiDocumentationParser} entrypoint={entrypoint} />;
 ```
 
-All you have to do is to provide a collection of objects (the `newResources` variable).
-The value of the `name` property must match the resource name you want to customize, or it will be ignored.
-Other available properties will be explained further.
+All you have to do is to provide a collection of objects \(the `newResources` variable\). The value of the `name` property must match the resource name you want to customize, or it will be ignored. Other available properties will be explained further.
 
 ## Customizing Inputs
 
@@ -86,8 +84,7 @@ export default [
 ];
 ```
 
-That's it! Our custom `TextInput` component will now be used in all forms to edit the `name` property of the `greeting` resource.
-In this example, we are reusing an `Input` component provided by `react-admin`, but you can use any component you want as long as you respect [the signature expected by react-admin](https://marmelab.com/react-admin/Inputs.html).
+That's it! Our custom `TextInput` component will now be used in all forms to edit the `name` property of the `greeting` resource. In this example, we are reusing an `Input` component provided by `react-admin`, but you can use any component you want as long as you respect [the signature expected by react-admin](https://marmelab.com/react-admin/Inputs.html).
 
 ## Customizing Fields
 
@@ -114,8 +111,7 @@ export default [
 ];
 ```
 
-That's it! Our custom `myField` component will now be used to display the resource.
-In this example, we are reusing a `Field` component provided by `react-admin`, but you can use any component you want as long as you respect [the signature expected by react-admin](https://marmelab.com/react-admin/Fields.html).
+That's it! Our custom `myField` component will now be used to display the resource. In this example, we are reusing a `Field` component provided by `react-admin`, but you can use any component you want as long as you respect [the signature expected by react-admin](https://marmelab.com/react-admin/Fields.html).
 
 ## "Free" Mode
 
@@ -308,3 +304,4 @@ export default [
 ```
 
 In this example, we have been able to customize the template to add a custom grid, but you could do more, have a look at the `Create`part above to see more examples.
+

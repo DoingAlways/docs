@@ -2,20 +2,26 @@
 
 Create a Vue.js application using [vue-cli](https://github.com/vuejs/vue-cli):
 
-    $ vue init webpack-simple my-app
-    $ cd my-app
+```text
+$ vue init webpack-simple my-app
+$ cd my-app
+```
 
-Install Vue Router, Vuex and babel-plugin-transform-builtin-extend (to allow extending built-in types like Error and Array):
+Install Vue Router, Vuex and babel-plugin-transform-builtin-extend \(to allow extending built-in types like Error and Array\):
 
-    $ yarn add vue-router vuex babel-plugin-transform-builtin-extend babel-preset-es2015 babel-preset-stage-2
+```text
+$ yarn add vue-router vuex babel-plugin-transform-builtin-extend babel-preset-es2015 babel-preset-stage-2
+```
 
 Install the generator globally:
 
-    $ yarn global add @api-platform/client-generator
+```text
+$ yarn global add @api-platform/client-generator
+```
 
-Reference the Bootstrap CSS stylesheet in `public/index.html` (optional):
+Reference the Bootstrap CSS stylesheet in `public/index.html` \(optional\):
 
-```html
+```markup
   <!-- ... -->
     <title>vue-generator</title>
 
@@ -27,9 +33,11 @@ Reference the Bootstrap CSS stylesheet in `public/index.html` (optional):
 
 In the app directory, generate the files for the resource you want:
 
-    $ generate-api-platform-client --generator vue https://demo.api-platform.com src/ --resource foo
-    # Replace the URL by the entrypoint of your Hydra-enabled API
-    # Omit the resource flag to generate files for all resource types exposed by the API
+```text
+$ generate-api-platform-client --generator vue https://demo.api-platform.com src/ --resource foo
+# Replace the URL by the entrypoint of your Hydra-enabled API
+# Omit the resource flag to generate files for all resource types exposed by the API
+```
 
 The code is ready to be executed! Register the generated routes and store modules in the `main.js` file. Here is an example:
 
@@ -85,7 +93,7 @@ Make sure to update the `.babelrc` file with the following:
 
 Replace the `App.vue` file with the following :
 
-```html
+```markup
 <template>
   <div class="container">
     <nav>
@@ -101,3 +109,4 @@ Replace the `App.vue` file with the following :
   </div>
 </template>
 ```
+

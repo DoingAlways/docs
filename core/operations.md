@@ -1,60 +1,45 @@
 # Operations
 
-API Platform Core relies on the concept of operations. Operations can be applied to a resource exposed by the API. From
-an implementation point of view, an operation is a link between a resource, a route and its related controller.
+API Platform Core relies on the concept of operations. Operations can be applied to a resource exposed by the API. From an implementation point of view, an operation is a link between a resource, a route and its related controller.
 
-API Platform automatically registers typical [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations
-and describes them in the exposed documentation (Hydra and Swagger). It also creates and registers routes corresponding
-to these operations in the Symfony routing system (if it is available).
+API Platform automatically registers typical [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations and describes them in the exposed documentation \(Hydra and Swagger\). It also creates and registers routes corresponding to these operations in the Symfony routing system \(if it is available\).
 
-The behavior of built-in operations is briefly presented in the [Getting started](getting-started.md#mapping-the-entities)
-guide.
+The behavior of built-in operations is briefly presented in the [Getting started](getting-started.md#mapping-the-entities) guide.
 
-The list of enabled operations can be configured on a per-resource basis. Creating custom operations on specific routes
-is also possible.
+The list of enabled operations can be configured on a per-resource basis. Creating custom operations on specific routes is also possible.
 
 There are two types of operations: collection operations and item operations.
 
-Collection operations act on a collection of resources. By default two routes are implemented: `POST` and `GET`. Item
-operations act on an individual resource. Three default routes are defined: `GET`, `PUT` and `DELETE` (`PATCH` is also supported
-when [using the JSON API format](content-negotiation.md), as required by the specification).
+Collection operations act on a collection of resources. By default two routes are implemented: `POST` and `GET`. Item operations act on an individual resource. Three default routes are defined: `GET`, `PUT` and `DELETE` \(`PATCH` is also supported when [using the JSON API format](content-negotiation.md), as required by the specification\).
 
-When the `ApiPlatform\Core\Annotation\ApiResource` annotation is applied to an entity class, the following built-in CRUD
-operations are automatically enabled:
+When the `ApiPlatform\Core\Annotation\ApiResource` annotation is applied to an entity class, the following built-in CRUD operations are automatically enabled:
 
-*Collection operations*
+_Collection operations_
 
-Method | Mandatory | Description
--------|-----------|------------------------------------------
-`GET`  | yes       | Retrieve the (paginated) list of elements
-`POST` | no        | Create a new element
+| Method | Mandatory | Description |
+| :--- | :--- | :--- |
+| `GET` | yes | Retrieve the \(paginated\) list of elements |
+| `POST` | no | Create a new element |
 
-*Item operations*
+_Item operations_
 
-Method   | Mandatory | Description
----------|-----------|------------------
-`GET`    | yes       | Retrieve an element
-`PUT`    | no        | Update an element
-`DELETE` | no        | Delete an element
+| Method | Mandatory | Description |
+| :--- | :--- | :--- |
+| `GET` | yes | Retrieve an element |
+| `PUT` | no | Update an element |
+| `DELETE` | no | Delete an element |
 
 ## Enabling and Disabling Operations
 
-If no operation is specified, all default CRUD operations are automatically registered. It is also possible - and recommended
-for large projects - to define operations explicitly.
+If no operation is specified, all default CRUD operations are automatically registered. It is also possible - and recommended for large projects - to define operations explicitly.
 
-Keep in mind that `collectionOperations` and `itemOperations` behave independently. For instance, if you don't explicitly
-configure operations for `collectionOperations`, `GET` and `POST` operations will be automatically registered, even if you
-explicitly configure `itemOperations`. The reverse is also true.
+Keep in mind that `collectionOperations` and `itemOperations` behave independently. For instance, if you don't explicitly configure operations for `collectionOperations`, `GET` and `POST` operations will be automatically registered, even if you explicitly configure `itemOperations`. The reverse is also true.
 
-Operations can be configured using annotations, XML or YAML. In the following examples, we enable only the built-in operation
-for the `GET` method for both `collectionOperations` and `itemOperations` to create a readonly endpoint.
+Operations can be configured using annotations, XML or YAML. In the following examples, we enable only the built-in operation for the `GET` method for both `collectionOperations` and `itemOperations` to create a readonly endpoint.
 
-`itemOperations` and `collectionOperations` are arrays containing a list of operation. Each operation is defined by a key
-corresponding to the name of the operation that can be anything you want and an array of properties as value. If an
-empty list of operations is provided, all operations are disabled.
+`itemOperations` and `collectionOperations` are arrays containing a list of operation. Each operation is defined by a key corresponding to the name of the operation that can be anything you want and an array of properties as value. If an empty list of operations is provided, all operations are disabled.
 
-If the operation's name match a supported HTTP methods (`GET`, `POST`, `PUT` or `DELETE`), the corresponding `method` property
-will be automatically added.
+If the operation's name match a supported HTTP methods \(`GET`, `POST`, `PUT` or `DELETE`\), the corresponding `method` property will be automatically added.
 
 ```php
 <?php
@@ -109,7 +94,7 @@ App\Entity\Book:
 
 Or the XML configuration format:
 
-```xml
+```markup
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- api/config/api_platform/resources.xml -->
 
@@ -128,15 +113,13 @@ Or the XML configuration format:
 </resources>
 ```
 
-API Platform Core is smart enough to automatically register the applicable Symfony route referencing a built-in CRUD action
-just by specifying the method name as key, or by checking the explicitly configured HTTP method.
+API Platform Core is smart enough to automatically register the applicable Symfony route referencing a built-in CRUD action just by specifying the method name as key, or by checking the explicitly configured HTTP method.
 
 ## Configuring Operations
 
 The URL, the HTTP method and the Hydra context passed to documentation generators of operations are easy to configure.
 
-In the next example, both `GET` and `PUT` operations are registered with custom URLs. Those will override the URLs generated by
-default. In addition to that, we replace the Hydra context for the `PUT` operation, and require the `id` parameter to be an integer.
+In the next example, both `GET` and `PUT` operations are registered with custom URLs. Those will override the URLs generated by default. In addition to that, we replace the Hydra context for the `PUT` operation, and require the `id` parameter to be an integer.
 
 ```php
 <?php
@@ -185,7 +168,7 @@ App\Entity\Book:
 
 Or in XML:
 
-```xml
+```markup
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- api/config/api_platform/resources.xml -->
 
@@ -232,9 +215,7 @@ In all the previous examples, you can safely remove the `method` because the met
 
 ### Prefixing All Routes of All Operations
 
-Sometimes it's also useful to put a whole resource into its own "namespace" regarding the URI. Let's say you want to
-put everything that's related to a `Book` into the `library` so that URIs become `library/book/{id}`. In that case
-you don't need to override all the operations to set the path but configure the `route_prefix` attribute for the whole entity instead:
+Sometimes it's also useful to put a whole resource into its own "namespace" regarding the URI. Let's say you want to put everything that's related to a `Book` into the `library` so that URIs become `library/book/{id}`. In that case you don't need to override all the operations to set the path but configure the `route_prefix` attribute for the whole entity instead:
 
 ```php
 <?php
@@ -255,11 +236,9 @@ Alternatively, the more verbose attribute syntax can be used `@ApiResource(attri
 
 ## Subresources
 
-Since ApiPlatform 2.1, you can declare subresources (only for `GET` operation at the moment). A subresource is a collection or an item that belongs to another resource.
-The starting point of a subresource must be a relation on an existing resource.
+Since ApiPlatform 2.1, you can declare subresources \(only for `GET` operation at the moment\). A subresource is a collection or an item that belongs to another resource. The starting point of a subresource must be a relation on an existing resource.
 
-For example, let's create two entities (Question, Answer) and set up a subresource so that `/question/42/answer` gives us
-the answer to the question 42:
+For example, let's create two entities \(Question, Answer\) and set up a subresource so that `/question/42/answer` gives us the answer to the question 42:
 
 ```php
 <?php
@@ -361,7 +340,7 @@ App\Entity\Question:
 
 Note that all we had to do is to set up `@ApiSubresource` on the `Question::answer` relation. Because the `answer` is a to-one relation, we know that this subresource is an item. Therefore the response will look like this:
 
-```json
+```javascript
 {
   "@context": "/contexts/Answer",
   "@id": "/answers/42",
@@ -412,7 +391,7 @@ App\Entity\Answer:
 
 Or in XML:
 
-```xml
+```markup
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- api/config/api_platform/resources.xml -->
 
@@ -435,12 +414,9 @@ Or in XML:
 </resources>
 ```
 
-In the previous examples, the `method` attribute is mandatory, because the operation name doesn't match a supported HTTP
-method.
+In the previous examples, the `method` attribute is mandatory, because the operation name doesn't match a supported HTTP method.
 
-Note that the operation name, here `api_questions_answer_get_subresource`, is the important keyword.
-It'll be automatically set to `$resources_$subresource(s)_get_subresource`. To find the correct operation name you
-may use `bin/console debug:router`.
+Note that the operation name, here `api_questions_answer_get_subresource`, is the important keyword. It'll be automatically set to `$resources_$subresource(s)_get_subresource`. To find the correct operation name you may use `bin/console debug:router`.
 
 ### Control the Path of Subresources
 
@@ -491,8 +467,7 @@ The `subresourceOperations` attribute also allows you to add an access control o
 
 ### Control the Depth of Subresources
 
-You can control depth of subresources with the parameter `maxDepth`. For example, if the `Answer` entity also has a subresource
-such as `comments`and you don't want the route `api/questions/{id}/answers/{id}/comments` to be generated. You can do this by adding the parameter maxDepth in the ApiSubresource annotation or YAML/XML file configuration.
+You can control depth of subresources with the parameter `maxDepth`. For example, if the `Answer` entity also has a subresource such as `comments`and you don't want the route `api/questions/{id}/answers/{id}/comments` to be generated. You can do this by adding the parameter maxDepth in the ApiSubresource annotation or YAML/XML file configuration.
 
 ```php
 <?php
@@ -520,23 +495,15 @@ class Question
 
 ## Creating Custom Operations and Controllers
 
-API Platform can leverage the Symfony routing system to register custom operations related to custom controllers. Such custom
-controllers can be any valid [Symfony controller](http://symfony.com/doc/current/book/controller.html), including standard
-Symfony controllers extending the [`Symfony\Bundle\FrameworkBundle\Controller\AbstractController`](http://api.symfony.com/4.1/Symfony/Bundle/FrameworkBundle/Controller/AbstractController.html)
-helper class.
+API Platform can leverage the Symfony routing system to register custom operations related to custom controllers. Such custom controllers can be any valid [Symfony controller](http://symfony.com/doc/current/book/controller.html), including standard Symfony controllers extending the [`Symfony\Bundle\FrameworkBundle\Controller\AbstractController`](http://api.symfony.com/4.1/Symfony/Bundle/FrameworkBundle/Controller/AbstractController.html) helper class.
 
-However, API Platform recommends to use **action classes** instead of typical Symfony controllers. Internally, API Platform
-implements the [Action-Domain-Responder](https://github.com/pmjones/adr) pattern (ADR), a web-specific refinement of
-[MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller).
+However, API Platform recommends to use **action classes** instead of typical Symfony controllers. Internally, API Platform implements the [Action-Domain-Responder](https://github.com/pmjones/adr) pattern \(ADR\), a web-specific refinement of [MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller).
 
 Note: [the event system](events.md) should be preferred over custom controllers when applicable.
 
-The distribution of API Platform also eases the implementation of the ADR pattern: it automatically registers action classes
-stored in `api/src/App/Controller` as autowired services.
+The distribution of API Platform also eases the implementation of the ADR pattern: it automatically registers action classes stored in `api/src/App/Controller` as autowired services.
 
-Thanks to the [autowiring](http://symfony.com/doc/current/components/dependency_injection/autowiring.html) feature of the
-Symfony Dependency Injection container, services required by an action can be type-hinted in its constructor, it will be
-automatically instantiated and injected, without having to declare it explicitly.
+Thanks to the [autowiring](http://symfony.com/doc/current/components/dependency_injection/autowiring.html) feature of the Symfony Dependency Injection container, services required by an action can be type-hinted in its constructor, it will be automatically instantiated and injected, without having to declare it explicitly.
 
 In the following examples, the built-in `GET` operation is registered as well as a custom operation called `post_publication`.
 
@@ -574,28 +541,17 @@ class CreateBookPublication
 }
 ```
 
-This custom operation behaves exactly like the built-in operation: it returns a JSON-LD document corresponding to the id
-passed in the URL.
+This custom operation behaves exactly like the built-in operation: it returns a JSON-LD document corresponding to the id passed in the URL.
 
-Here we consider that [autowiring](https://symfony.com/doc/current/service_container/autowiring.html) is enabled for
-controller classes (the default when using the API Platform distribution).
-This action will be automatically registered as a service (the service name is the same as the class name:
-`App\Controller\CreateBookPublication`).
+Here we consider that [autowiring](https://symfony.com/doc/current/service_container/autowiring.html) is enabled for controller classes \(the default when using the API Platform distribution\). This action will be automatically registered as a service \(the service name is the same as the class name: `App\Controller\CreateBookPublication`\).
 
-API Platform automatically retrieves the appropriate PHP entity using the data provider then deserializes user data in it,
-and for `POST` and `PUT` requests updates the entity with data provided by the user.
+API Platform automatically retrieves the appropriate PHP entity using the data provider then deserializes user data in it, and for `POST` and `PUT` requests updates the entity with data provided by the user.
 
-**Warning: the `__invoke()` method parameter [MUST be called `$data`](https://symfony.com/doc/current/components/http_kernel.html#getting-the-controller-arguments)**, otherwise, it will not be filled correctly!
+**Warning: the `__invoke()` method parameter** [**MUST be called `$data`**](https://symfony.com/doc/current/components/http_kernel.html#getting-the-controller-arguments), otherwise, it will not be filled correctly!
 
-Services (`$myService` here) are automatically injected thanks to the autowiring feature. You can type-hint any service
-you need and it will be autowired too.
+Services \(`$myService` here\) are automatically injected thanks to the autowiring feature. You can type-hint any service you need and it will be autowired too.
 
-The `__invoke` method of the action is called when the matching route is hit. It can return either an instance of
-`Symfony\Component\HttpFoundation\Response` (that will be displayed to the client immediately by the Symfony kernel) or,
-like in this example, an instance of an entity mapped as a resource (or a collection of instances for collection operations).
-In this case, the entity will pass through [all built-in event listeners](events.md#built-in-event-listeners) of API Platform. It will be
-automatically validated, persisted and serialized in JSON-LD. Then the Symfony kernel will send the resulting document to
-the client.
+The `__invoke` method of the action is called when the matching route is hit. It can return either an instance of `Symfony\Component\HttpFoundation\Response` \(that will be displayed to the client immediately by the Symfony kernel\) or, like in this example, an instance of an entity mapped as a resource \(or a collection of instances for collection operations\). In this case, the entity will pass through [all built-in event listeners](events.md#built-in-event-listeners) of API Platform. It will be automatically validated, persisted and serialized in JSON-LD. Then the Symfony kernel will send the resulting document to the client.
 
 The routing has not been configured yet because we will add it at the resource configuration level:
 
@@ -637,7 +593,7 @@ App\Entity\Book:
 
 Or in XML:
 
-```xml
+```markup
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- api/config/api_platform/resources.xml -->
 
@@ -658,8 +614,7 @@ Or in XML:
 </resources>
 ```
 
-It is mandatory to set the `method`, `path` and `controller` attributes. They allow API platform to configure the routing path and
-the associated controller respectively.
+It is mandatory to set the `method`, `path` and `controller` attributes. They allow API platform to configure the routing path and the associated controller respectively.
 
 #### Serialization Groups
 
@@ -714,7 +669,7 @@ App\Entity\Book:
 
 Or in XML:
 
-```xml
+```markup
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- api/config/api_platform/resources.xml -->
 
@@ -742,8 +697,7 @@ Or in XML:
 
 #### Entity Retrieval
 
-If you want to bypass the automatic retrieval of the entity in your custom operation, you can set `"read"=false` in the
-operation attribute:
+If you want to bypass the automatic retrieval of the entity in your custom operation, you can set `"read"=false` in the operation attribute:
 
 ```php
 <?php
@@ -785,7 +739,7 @@ App\Entity\Book:
 
 Or in XML:
 
-```xml
+```markup
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- api/config/api_platform/resources.xml -->
 
@@ -807,18 +761,15 @@ Or in XML:
 </resources>
 ```
 
-This way, it will skip the `ReadListener`. You can do the same for some other built-in listeners. See [Built-in Event Listeners](events.md#built-in-event-listeners)
-for more information.
+This way, it will skip the `ReadListener`. You can do the same for some other built-in listeners. See [Built-in Event Listeners](events.md#built-in-event-listeners) for more information.
 
 ### Alternative Method
 
-There is another way to create a custom operation. However, we do not encourage its use. Indeed, this one disperses
-the configuration at the same time in the routing and the resource configuration.
+There is another way to create a custom operation. However, we do not encourage its use. Indeed, this one disperses the configuration at the same time in the routing and the resource configuration.
 
 The `post_publication` operation references the Symfony route named `book_post_publication`.
 
-Since version 2.3, you can also use the route name as operation name by convention, as shown in the following example
-for `book_post_discontinuation` when neither `method` nor `route_name` attributes are specified.
+Since version 2.3, you can also use the route name as operation name by convention, as shown in the following example for `book_post_discontinuation` when neither `method` nor `route_name` attributes are specified.
 
 First, let's create your resource configuration:
 
@@ -855,7 +806,7 @@ App\Entity\Book:
 
 Or in XML:
 
-```xml
+```markup
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- api/config/api_platform/resources.xml -->
 
@@ -875,8 +826,7 @@ Or in XML:
 </resources>
 ```
 
-API Platform will automatically map this `post_publication` operation to the route `book_post_publication`. Let's create a custom action
-and its related route using annotations:
+API Platform will automatically map this `post_publication` operation to the route `book_post_publication`. Let's create a custom action and its related route using annotations:
 
 ```php
 <?php
@@ -916,11 +866,9 @@ class CreateBookPublication
 }
 ```
 
-It is mandatory to set `_api_resource_class` and `_api_item_operation_name` (or `_api_collection_operation_name` for a collection
-operation) in the parameters of the route (`defaults` key). It allows API Platform to work with the Symfony routing system.
+It is mandatory to set `_api_resource_class` and `_api_item_operation_name` \(or `_api_collection_operation_name` for a collection operation\) in the parameters of the route \(`defaults` key\). It allows API Platform to work with the Symfony routing system.
 
-Alternatively, you can also use a traditional Symfony controller and YAML or XML route declarations. The following example does
-the exact same thing as the previous example:
+Alternatively, you can also use a traditional Symfony controller and YAML or XML route declarations. The following example does the exact same thing as the previous example:
 
 ```php
 <?php
@@ -950,3 +898,4 @@ book_post_publication:
         _api_resource_class: App\Entity\Book
         _api_item_operation_name: post_publication
 ```
+

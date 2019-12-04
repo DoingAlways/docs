@@ -1,16 +1,13 @@
 # Pagination
 
-API Platform Core has native support for paged collections. Pagination is enabled by default for all collections. Each collections
-contains 30 items per page.
-The activation of the pagination and the number of elements per page can be configured from:
+API Platform Core has native support for paged collections. Pagination is enabled by default for all collections. Each collections contains 30 items per page. The activation of the pagination and the number of elements per page can be configured from:
 
-* the server-side (globally or per resource)
-* the client-side, via a custom GET parameter (disabled by default)
+* the server-side \(globally or per resource\)
+* the client-side, via a custom GET parameter \(disabled by default\)
 
-When issuing a `GET` request on a collection containing more than 1 page (here `/books`), a [Hydra collection](http://www.hydra-cg.com/spec/latest/core/#collections)
-is returned. It's a valid JSON(-LD) document containing items of the requested page and metadata.
+When issuing a `GET` request on a collection containing more than 1 page \(here `/books`\), a [Hydra collection](http://www.hydra-cg.com/spec/latest/core/#collections) is returned. It's a valid JSON\(-LD\) document containing items of the requested page and metadata.
 
-```json
+```javascript
 {
   "@context": "/contexts/Book",
   "@id": "/books",
@@ -36,8 +33,7 @@ is returned. It's a valid JSON(-LD) document containing items of the requested p
 }
 ```
 
-Hypermedia links to the first, the last, previous and the next page in the collection are displayed as well as the number
-of total items in the collection.
+Hypermedia links to the first, the last, previous and the next page in the collection are displayed as well as the number of total items in the collection.
 
 The name of the page parameter can be changed with the following configuration:
 
@@ -51,9 +47,7 @@ api_platform:
 
 ## Disabling the Pagination
 
-Paginating collections is generally accepted as a good practice. It allows browsing large collections without too much
-overhead as well as preventing [DOS attacks](https://en.wikipedia.org/wiki/Denial-of-service_attack).
-However, for small collections, it can be convenient to fully disable the pagination.
+Paginating collections is generally accepted as a good practice. It allows browsing large collections without too much overhead as well as preventing [DOS attacks](https://en.wikipedia.org/wiki/Denial-of-service_attack). However, for small collections, it can be convenient to fully disable the pagination.
 
 ### Globally
 
@@ -90,8 +84,7 @@ class Book
 
 #### Globally
 
-You can configure API Platform Core to let the client enable or disable the pagination. To activate this feature globally,
-use the following configuration:
+You can configure API Platform Core to let the client enable or disable the pagination. To activate this feature globally, use the following configuration:
 
 ```yaml
 # api/config/packages/api_platform.yaml
@@ -107,8 +100,7 @@ The pagination can now be enabled or disabled by adding a query parameter named 
 * `GET /books?pagination=false`: disabled
 * `GET /books?pagination=true`: enabled
 
-Any value accepted by the [`FILTER_VALIDATE_BOOLEAN`](http://php.net/manual/en/filter.filters.validate.php) filter can be
-used as the value.
+Any value accepted by the [`FILTER_VALIDATE_BOOLEAN`](http://php.net/manual/en/filter.filters.validate.php) filter can be used as the value.
 
 #### For a specific resource
 
@@ -179,7 +171,7 @@ The number of items per page can now be changed adding a query parameter named `
 
 #### For a Specific Resource
 
-Changing the number of items per page can be enabled (or disabled) for a specific resource:
+Changing the number of items per page can be enabled \(or disabled\) for a specific resource:
 
 ```php
 <?php
@@ -252,8 +244,7 @@ class Book
 
 ## Partial Pagination
 
-When using the default pagination, a `COUNT` query will be issued against the current requested collection. This may have a
-performance impact on really big collections. The downside is that the information about the last page is lost (ie: `hydra:last`).
+When using the default pagination, a `COUNT` query will be issued against the current requested collection. This may have a performance impact on really big collections. The downside is that the information about the last page is lost \(ie: `hydra:last`\).
 
 ### Globally
 
@@ -322,8 +313,7 @@ class Book
 
 ## Cursor based pagination
 
-To configure your resource to use the cursor-based pagination, select your unique sorted field as well as the direction you’ll like the pagination to go via filters and enable the `pagination_via_cursor` option.
-Note that for now you have to declare a `RangeFilter` and an `OrderFilter` on the property used for the cursor-based pagination.
+To configure your resource to use the cursor-based pagination, select your unique sorted field as well as the direction you’ll like the pagination to go via filters and enable the `pagination_via_cursor` option. Note that for now you have to declare a `RangeFilter` and an `OrderFilter` on the property used for the cursor-based pagination.
 
 The following configuration also works on a specific operation:
 
@@ -351,73 +341,73 @@ class Book
 }
 ```
 
-To know more about cursor-based pagination take a look at [this blog post on medium (draft)](https://medium.com/@sroze/74fd1d324723).
+To know more about cursor-based pagination take a look at [this blog post on medium \(draft\)](https://medium.com/@sroze/74fd1d324723).
 
 ## Controlling the behavior of the Doctrine ORM Paginator
 
 The [PaginationExtension](https://github.com/api-platform/core/blob/master/src/Bridge/Doctrine/Orm/Extension/PaginationExtension.php) of API Platform performs some checks on the `QueryBuilder` to guess, in most common cases, the correct values to use when configuring the Doctrine ORM Paginator:
 
--   `$fetchJoinCollection` argument: Whether there is a join to a collection-valued association. When set to `true`, the Doctrine ORM Paginator will perform an additional query, in order to get the correct number of results.
+* `$fetchJoinCollection` argument: Whether there is a join to a collection-valued association. When set to `true`, the Doctrine ORM Paginator will perform an additional query, in order to get the correct number of results.
 
-    You can configure this using the `pagination_fetch_join_collection` attribute on a resource or on a per-operation basis:
+  You can configure this using the `pagination_fetch_join_collection` attribute on a resource or on a per-operation basis:
 
-    ```php
-    <?php
-    // api/src/Entity/Book.php
+  ```php
+  <?php
+  // api/src/Entity/Book.php
 
-    use ApiPlatform\Core\Annotation\ApiResource;
+  use ApiPlatform\Core\Annotation\ApiResource;
 
-    /**
-    * @ApiResource(
-    *     attributes={"pagination_fetch_join_collection"=false},
-    *     collectionOperations={
-    *         "get",
-    *         "get_custom"={
-    *             ...
-    *             "pagination_fetch_join_collection"=true,
-    *         },
-    *     },
-    * )
-    */
-    class Book
-    {
-        // ...
-    }
-    ```
+  /**
+  * @ApiResource(
+  *     attributes={"pagination_fetch_join_collection"=false},
+  *     collectionOperations={
+  *         "get",
+  *         "get_custom"={
+  *             ...
+  *             "pagination_fetch_join_collection"=true,
+  *         },
+  *     },
+  * )
+  */
+  class Book
+  {
+      // ...
+  }
+  ```
 
--   `setUseOutputWalkers` setter: Whether to use output walkers. When set to `true`, the Doctrine ORM Paginator will use output walkers, which are compulsory for some types of queries.
+* `setUseOutputWalkers` setter: Whether to use output walkers. When set to `true`, the Doctrine ORM Paginator will use output walkers, which are compulsory for some types of queries.
 
-    You can configure this using the `pagination_use_output_walkers` attribute on a resource or on a per-operation basis:
+  You can configure this using the `pagination_use_output_walkers` attribute on a resource or on a per-operation basis:
 
-    ```php
-    <?php
-    // api/src/Entity/Book.php
+  ```php
+  <?php
+  // api/src/Entity/Book.php
 
-    use ApiPlatform\Core\Annotation\ApiResource;
+  use ApiPlatform\Core\Annotation\ApiResource;
 
-    /**
-    * @ApiResource(
-    *     attributes={"pagination_use_output_walkers"=false},
-    *     collectionOperations={
-    *         "get",
-    *         "get_custom"={
-    *             ...
-    *             "pagination_use_output_walkers"=true,
-    *         },
-    *     },
-    * )
-    */
-    class Book
-    {
-        // ...
-    }
-    ```
+  /**
+  * @ApiResource(
+  *     attributes={"pagination_use_output_walkers"=false},
+  *     collectionOperations={
+  *         "get",
+  *         "get_custom"={
+  *             ...
+  *             "pagination_use_output_walkers"=true,
+  *         },
+  *     },
+  * )
+  */
+  class Book
+  {
+      // ...
+  }
+  ```
 
 For more information, please see the [Pagination](https://www.doctrine-project.org/projects/doctrine-orm/en/current/tutorials/pagination.html) entry in the Doctrine ORM documentation.
 
 ## Custom Controller Action
 
-In case you're using a custom controller action make sure you return the `Paginator` object to get the full hydra response with `hydra:view` (which contains information about first, last, next and previous page). The following examples show how to handle it within a repository method. The controller needs to pass through the page number. You will need to use the Doctrine Paginator and pass it to the API Platform Paginator.
+In case you're using a custom controller action make sure you return the `Paginator` object to get the full hydra response with `hydra:view` \(which contains information about first, last, next and previous page\). The following examples show how to handle it within a repository method. The controller needs to pass through the page number. You will need to use the Doctrine Paginator and pass it to the API Platform Paginator.
 
 First example:
 
@@ -475,6 +465,7 @@ class BookRepository extends ServiceEntityRepository
     }
 }
 ```
+
 The Controller would look like this:
 
 ```php
@@ -500,8 +491,7 @@ class GetBooksByFavoriteAuthorAction extends AbstractController
 }
 ```
 
-The service needs to use the proper repository method.
-You can also use the Query object inside the repository method and pass it to the Paginator instead of passing the QueryBuilder and using Criteria. Second Example:
+The service needs to use the proper repository method. You can also use the Query object inside the repository method and pass it to the Paginator instead of passing the QueryBuilder and using Criteria. Second Example:
 
 ```php
 <?php
@@ -539,3 +529,4 @@ class BookRepository extends ServiceEntityRepository
     }
 }
 ```
+

@@ -1,6 +1,6 @@
 # Typescript Interfaces
 
-The TypeScript Generator allows you to create [TypeScript interfaces](https://www.typescriptlang.org/docs/handbook/interfaces.html) that you can embed in any TypeScript-enabled project (React, Vue.js, Angular..)
+The TypeScript Generator allows you to create [TypeScript interfaces](https://www.typescriptlang.org/docs/handbook/interfaces.html) that you can embed in any TypeScript-enabled project \(React, Vue.js, Angular..\)
 
 To do so, run the client generator:
 
@@ -29,3 +29,4 @@ you will obtain 2 `.ts` files arranged as following:
   * interfaces/
     * foo.ts
     * bar.ts
+

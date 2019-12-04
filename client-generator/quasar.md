@@ -1,18 +1,21 @@
 # Quasar Framework Generator
 
-Create a Quasar Framework application using
-[quasar-cli](https://quasar.dev/quasar-cli/installation):
+Create a Quasar Framework application using [quasar-cli](https://quasar.dev/quasar-cli/installation):
 
-    $ quasar create my-app
-    $ cd my-app
+```text
+$ quasar create my-app
+$ cd my-app
 
-    $ yarn global add @api-platform/client-generator
+$ yarn global add @api-platform/client-generator
+```
 
 In the app directory, generate the files for the resource you want:
 
-    $ generate-api-platform-client -g quasar https://demo.api-platform.com src/ --resource foo
-    # Replace the URL by the entrypoint of your Hydra-enabled API
-    # Omit the resource flag to generate files for all resource types exposed by the API
+```text
+$ generate-api-platform-client -g quasar https://demo.api-platform.com src/ --resource foo
+# Replace the URL by the entrypoint of your Hydra-enabled API
+# Omit the resource flag to generate files for all resource types exposed by the API
+```
 
 The code is ready to be executed! Register the generated routes in `src/router/routes.js`
 
@@ -26,7 +29,6 @@ const routes = [
     children: [
       ...fooRoutes
     ],
-
 ```
 
 and store modules in the `src/store/index.js` file.
@@ -40,7 +42,6 @@ export default function(/* { ssrContext } */) {
     modules: {
       foo,
     },
-
 ```
 
 Make sure to update the `quasar.conf.js` file with the following:
@@ -78,3 +79,4 @@ framework: {
     },
   },
 ```
+

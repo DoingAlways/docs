@@ -1,6 +1,6 @@
 # React Generator
 
-![List screenshot](images/react/client-generator-react-list.png)
+![List screenshot](../.gitbook/assets/client-generator-react-list%20%281%29.png)
 
 The React Client Generator generates a Progressive Web App built with battle-tested libraries from the ecosystem:
 
@@ -13,14 +13,9 @@ It is designed to generate code that works seamlessly with [Facebook's Create Re
 
 ## Install
 
-The easiest way to get started is to install [the API Platform distribution](../distribution/index.md).
-It contains the React Client Generator, all dependencies it needs, a Progressive Web App skeleton generated with Create React App,
-a development Docker container to serve the webapp, and all the API Platform components you may need, including an API server
-supporting Hydra.
+The easiest way to get started is to install [the API Platform distribution](../distribution/index.md). It contains the React Client Generator, all dependencies it needs, a Progressive Web App skeleton generated with Create React App, a development Docker container to serve the webapp, and all the API Platform components you may need, including an API server supporting Hydra.
 
-If you use API Platform, jump to the next section!
-Alternatively, you can generate a skeleton and install the generator using [npx](https://www.npmjs.com/package/npx).
-To use this generator you need [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) (or [NPM](https://www.npmjs.com/)) installed.
+If you use API Platform, jump to the next section! Alternatively, you can generate a skeleton and install the generator using [npx](https://www.npmjs.com/package/npx). To use this generator you need [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) \(or [NPM](https://www.npmjs.com/)\) installed.
 
 Bootstrap a React application:
 
@@ -64,8 +59,7 @@ $ npx @api-platform/client-generator https://demo.api-platform.com src/ --resour
 # Replace the URL by the entrypoint of your Hydra-enabled API
 ```
 
-The code has been generated, and is ready to be executed!
-Register the reducers and the routes in the `client/src/index.js` file:
+The code has been generated, and is ready to be executed! Register the reducers and the routes in the `client/src/index.js` file:
 
 ```javascript
 import React from 'react';
@@ -118,13 +112,9 @@ ReactDOM.render(
 serviceWorker.unregister();
 ```
 
-Go to `https://localhost/books/` to start using your app.
-That's all!
+Go to `https://localhost/books/` to start using your app. That's all!
 
 ## Screenshots
 
-![List](images/react/client-generator-react-list.png)
-![Pagination](images/react/client-generator-react-list-pagination.png)
-![Show](images/react/client-generator-react-show.png)
-![Edit](images/react/client-generator-react-edit.png)
-![Delete](images/react/client-generator-react-delete.png)
+![List](../.gitbook/assets/client-generator-react-list.png) ![Pagination](../.gitbook/assets/client-generator-react-list-pagination.png) ![Show](../.gitbook/assets/client-generator-react-show.png) ![Edit](../.gitbook/assets/client-generator-react-edit.png) ![Delete](../.gitbook/assets/client-generator-react-delete.png)
+
