@@ -1,0 +1,2 @@
+# docs
+API Platform documentation
